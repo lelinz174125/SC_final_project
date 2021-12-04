@@ -18,6 +18,10 @@ def read_data():
     '''
     This function read a dataframe and return a new datafram with only numbers 
 
+    '''
+
+    df = pd.read_csv('heart.csv')
+    '''
     The features in the data set incluses
         Age: age of the patient [years]
         Sex: sex of the patient [1: Male, 0: Female]
@@ -34,8 +38,6 @@ def read_data():
         ST_Slope: the slope of the peak exercise ST segment [Up: upsloping, Flat: flat, Down: downsloping]
         HeartDisease: output class [1: heart disease, 0: Normal]
     '''
-
-    df = pd.read_csv('heart.csv')
     df.info()
     df.head(10)
     new_df = pd.DataFrame(columns=['Age','Sex',	'ChestPainType_TA','ChestPainType_ATA','ChestPainType_ASY',
