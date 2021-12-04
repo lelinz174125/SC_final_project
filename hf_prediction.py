@@ -82,3 +82,7 @@ def read_data():
     print(new_df)
 
     new_df.to_csv('heart_data_addressed.csv')
+
+
+def logisticRegression():
+    
