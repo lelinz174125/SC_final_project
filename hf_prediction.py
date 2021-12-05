@@ -110,9 +110,9 @@ def plot_confusion_matrix(y_test, y_pred):
 
 
 def ROC_curve(y_test, y_pred):
-    fpr, tpr, _ = metrics.roc_curve(y_test, y_pred)
+    fpr, tpr, threholds = metrics.roc_curve(y_test, y_pred)
     roc_auc = metrics.auc(fpr, tpr)
-    print(fpr,tpr)
+    print(fpr,tpr,threholds)
     plt.title('Receiver Operating Characteristic')
     plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
     plt.legend(loc = 'lower right')
@@ -123,6 +123,13 @@ def ROC_curve(y_test, y_pred):
     plt.xlabel('False Positive Rate')
     plt.show()
 
+def Scores(y_test,y_pred):
+    print('Precision: %.3f' % precision_score(y_test, y_pred))
+    print('Recall: %.3f' % recall_score(y_test, y_pred))
+    print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
+    print('F1 Score: %.3f' % f1_score(y_test, y_pred))
+    print('ROC-AUC Score: %.3f' % roc_auc_score(y_test, y_pred))
+    return None
 
 def PR_curve(y_test, y_pred):
     precision, recall, _= precision_recall_curve(y_test, y_pred)
@@ -139,26 +146,51 @@ def logisticRegression(dataset):
     Y = dataset['HeartDisease']
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
     # transfer = StandardScaler()
-    # x_train = transfer.fit_transform(X_train)
-    # x_test = transfer.fit_transform(X_test)
+    # x_train = transfer.fit_transform(x_train)
+    # x_test = transfer.fit_transform(x_test)
+    lr=LogisticRegression(class_weight="balanced")
+    lr.fit(x_train,y_train)
+    #利用训练模型进行预测
+    y_pred=lr.predict(x_test)
     print(y_test)
-    estimator = LogisticRegression()
-    estimator.fit(x_train, y_train)
-    y_pred = estimator.predict(x_test)
+    # res2 = lr.fit()
+    # res2.summary()
+    # estimator = LogisticRegression()
+    # estimator.fit(x_train, y_train)
+    # y_pred = estimator.predict(x_test)
+    print(y_pred)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred)
     PR_curve(y_test, y_pred)
+    Scores(y_test,y_pred)
     return y_test, y_pred
 
 def RandomForest(dataset):
-    pass
+    X = dataset.drop(['HeartDisease'], axis=1)
+    Y = dataset['HeartDisease']
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
+    # transfer = StandardScaler()
+    # x_train = transfer.fit_transform(x_train)
+    # x_test = transfer.fit_transform(x_test)
+    rf = RandomForestClassifier()
+    rf.fit(x_train,y_train)
+    #利用训练模型进行预测
+    y_pred=rf.predict(x_test)
+    print(y_pred)
+    plot_confusion_matrix(y_test,y_pred)
+    ROC_curve(y_test, y_pred)
+    PR_curve(y_test, y_pred)
+    Scores(y_test,y_pred)
+    return y_test, y_pred
+
 
 def GUI():
     pass
 
 if __name__ == '__main__':
     data = read_data()
-    logisticRegression(data)
+    # logisticRegression(data)
+    RandomForest(data)
     # EDA(data)
     
 
