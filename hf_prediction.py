@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+import sklearn.metrics as metrics
+from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler 
 from sklearn.manifold import TSNE 
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
+from sklearn.metrics import confusion_matrix,precision_recall_curve,precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
 from sklearn.feature_selection import VarianceThreshold
 
 
@@ -77,12 +79,86 @@ def read_data():
     new_df['ST_Slope_Flat'].replace(['Up','Flat','Down'],[0.0, 1.0, 0.0], inplace = True)
     new_df['ST_Slope_Down'].replace(['Up','Flat','Down'],[0.0, 0.0, 1.0], inplace = True)
 
-    new_df.info()
-    new_df.head(10)
-    print(new_df)
-
+    # new_df.info()
+    # new_df.head(10)
     new_df.to_csv('heart_data_addressed.csv')
+    return(new_df)
 
 
-def logisticRegression():
+def EDA(dataset):
     
+    corr = dataset.corr(method = 'spearman')
+    plt.figure(figsize=(20,6))
+    sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
+    plt.title('Spearman Correlation Heatmap')
+    plt.show()
+
+
+def plot_confusion_matrix(y_test, y_pred):
+   
+    conf_matrix = confusion_matrix(y_true=y_test, y_pred=y_pred)
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.matshow(conf_matrix, cmap='GnBu', alpha=0.75)
+    for i in range(conf_matrix.shape[0]):
+        for j in range(conf_matrix.shape[1]):
+            ax.text(x=j, y=i,s=conf_matrix[i, j], va='center', ha='center', size='large') 
+    plt.xlabel('Predictions', fontsize=14)
+    plt.ylabel('Actuals', fontsize=14)
+    plt.title('Confusion Matrix', fontsize=14)
+    plt.show()
+    return None
+
+
+def ROC_curve(y_test, y_pred):
+    fpr, tpr, _ = metrics.roc_curve(y_test, y_pred)
+    roc_auc = metrics.auc(fpr, tpr)
+    print(fpr,tpr)
+    plt.title('Receiver Operating Characteristic')
+    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
+    plt.legend(loc = 'lower right')
+    plt.plot([0, 1], [0, 1],'r--')
+    plt.xlim([0, 1])
+    plt.ylim([0, 1])
+    plt.ylabel('True Positive Rate')
+    plt.xlabel('False Positive Rate')
+    plt.show()
+
+
+def PR_curve(y_test, y_pred):
+    precision, recall, _= precision_recall_curve(y_test, y_pred)
+    print(precision,recall)
+    plt.plot(recall, precision, marker='.', label='Logistic')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Comparison of classification models (PRC)')
+    plt.legend()
+    plt.show()
+
+def logisticRegression(dataset):
+    X = dataset.drop(['HeartDisease'], axis=1)
+    Y = dataset['HeartDisease']
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
+    # transfer = StandardScaler()
+    # x_train = transfer.fit_transform(X_train)
+    # x_test = transfer.fit_transform(X_test)
+    print(y_test)
+    estimator = LogisticRegression()
+    estimator.fit(x_train, y_train)
+    y_pred = estimator.predict(x_test)
+    plot_confusion_matrix(y_test,y_pred)
+    ROC_curve(y_test, y_pred)
+    PR_curve(y_test, y_pred)
+    return y_test, y_pred
+
+def RandomForest(dataset):
+    pass
+
+def GUI():
+    pass
+
+if __name__ == '__main__':
+    data = read_data()
+    logisticRegression(data)
+    # EDA(data)
+    
+
