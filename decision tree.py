@@ -18,10 +18,10 @@ y=dataset['HeartDisease']
 
 x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.3)
 model=DecisionTreeClassifier()
-model.fit(x_train, y_train)
+model.fit(x_train, y_train)#create model
 y_pred=model.predict(x_test)
 
-score=accuracy_score(y_pred, y_test)
+score=accuracy_score(y_pred, y_test)#accuracy of the predict
 print(score)
 
 y_pred_prob=model.predict_proba(x_test)
