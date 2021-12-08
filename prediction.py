@@ -149,9 +149,11 @@ def Scores(y_test,y_pred):
     print('F1 Score: %.3f' % f1_score(y_test, y_pred))
     return None
     
+
 def rocauc_score(y_test, y_pred_proba):
     print('ROC-AUC Score: %.3f' % roc_auc_score(y_test, y_pred_proba[:,1]))
     return None
+
 
 def PR_curve(y_test, y_pred):
     precision, recall, _= precision_recall_curve(y_test, y_pred)
@@ -162,6 +164,7 @@ def PR_curve(y_test, y_pred):
     plt.title('Comparison of classification models (PRC)')
     plt.legend()
     plt.show()
+
 
 def logisticRegression(dataset):
     X = dataset.drop(['HeartDisease'], axis=1)
@@ -184,6 +187,7 @@ def logisticRegression(dataset):
     Scores(y_test,y_pred)
     rocauc_score(y_test,y_pred_proba)
     return y_test, y_pred, y_pred_proba
+
 
 def RandomForest(dataset):
     X = dataset.drop(['HeartDisease'], axis=1)
@@ -227,7 +231,6 @@ def decision_tree(dataset):
     Scores(y_test,y_pred)
     rocauc_score(y_test, y_pred_proba)
     return y_test, y_pred, y_pred_proba
-
 
 
 def GUI():
