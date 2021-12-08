@@ -3,12 +3,13 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
+import easygui
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
+# from sklearn.pipeline import Pipeline
 import sklearn.metrics as metrics
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler 
-from sklearn.manifold import TSNE 
+# from sklearn.manifold import TSNE 
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
