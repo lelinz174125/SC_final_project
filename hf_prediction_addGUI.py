@@ -2,7 +2,8 @@ from easygui.boxes.choice_box import make_list_or_none
 import pandas as pd
 import pandas as pd
 import numpy as np 
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+from pandas.core.frame import DataFrame 
 import seaborn as sns 
 import easygui as gui
 import tkinter as tk
@@ -17,7 +18,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix,precision_recall_curve,precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
 from sklearn.feature_selection import VarianceThreshold
-
+import joblib
 
 def read_data(df):
     '''
@@ -83,7 +84,7 @@ def read_data(df):
 
     # new_df.info()
     # new_df.head(10)
-    new_df.to_csv('heart_data_addressed.csv')
+    # new_df.to_csv('heart_data_addressed.csv')
     return(new_df)
 
 
@@ -156,6 +157,7 @@ def logisticRegression(dataset):
     y_pred=lr.predict(x_test)
     # res2 = lr.fit()
     # res2.summary()
+    joblib.dump(lr, "lr_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred)
     PR_curve(y_test, y_pred)
@@ -173,6 +175,7 @@ def RandomForest(dataset):
     rf.fit(x_train,y_train)
     #利用训练模型进行预测
     y_pred=rf.predict(x_test)
+    joblib.dump(lr, "rf_model.joblib" ,compress=1)
     print(y_pred)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred)
@@ -182,22 +185,38 @@ def RandomForest(dataset):
 
 
 def gui_visual():
-    gui.msgbox('test')
+    gui.msgbox('Thank you for this input')
     model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Randomforest','Desision Tree','Gaussian Naive Bayes'])
     features = ['Age','Sex','ChestPainType(TA,ATA,ASY,NAP)','RestingBP','Cholesterol','FastingBS','RestingECG(Normal,ST,LVH)','MaxHR','ExerciseAngina','Oldpeak','ST_Slope(Up,Flat,Down)']
     patience_information = gui.multenterbox(msg=' Please input patient information', title=' Heart Failure Prediction', fields=features, values=[])
+    gui.msgbox('Thank you for this input')
     print(patience_information)
     print(model_choice)
+    new_input = DataFrame(patience_information).T
+    
+    print(new_input)
+    new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
+    if model_choice == 'Logistic Regression':
+        new_model = joblib.load("lr_model.joblib")
+        new_pred_data = read_data(new_input)
+        result = new_model.predict(new_pred_data)
+        print(result)
+    elif model_choice =='Randomforest':
+        new_model = joblib.load("rf_model.joblib")
+    # elif model_choice =='Desision Tree':
+    #     new_model = joblib.load("model.joblib")
+    # elif model_choice == 'Gaussian Naive Bayes':
+    #     new_model = joblib.load("model.joblib")
+    
 
-
-def gui_visual():
+# def gui_visual():
     
 
 if __name__ == '__main__':
-    df = pd.read_csv('heart.csv')
-    data = read_data(df)
+    # df = pd.read_csv('heart.csv')
+    # data = read_data(df)
     # logisticRegression(data)
-    # RandomForest(data)
+    # # RandomForest(data)
     # EDA(data)
     gui_visual()
 
