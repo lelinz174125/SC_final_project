@@ -1,9 +1,11 @@
+from easygui.boxes.choice_box import make_list_or_none
 import pandas as pd
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
-import easygui
+import easygui as gui
+import tkinter as tk
 from sklearn.model_selection import train_test_split
 # from sklearn.pipeline import Pipeline
 import sklearn.metrics as metrics
@@ -17,13 +19,12 @@ from sklearn.metrics import confusion_matrix,precision_recall_curve,precision_sc
 from sklearn.feature_selection import VarianceThreshold
 
 
-def read_data():
+def read_data(df):
     '''
-    This function read a dataframe and return a new datafram with only numbers 
+    This function address a dataframe and return a new datafram with only numbers 
 
     '''
 
-    df = pd.read_csv('heart.csv')
     '''
     The features in the data set incluses
         Age: age of the patient [years]
@@ -180,13 +181,23 @@ def RandomForest(dataset):
     return y_test, y_pred
 
 
-def GUI():
-    pass
+def gui_visual():
+    gui.msgbox('test')
+    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Randomforest','Desision Tree','Gaussian Naive Bayes'])
+    features = ['Age','Sex','ChestPainType(TA,ATA,ASY,NAP)','RestingBP','Cholesterol','FastingBS','RestingECG(Normal,ST,LVH)','MaxHR','ExerciseAngina','Oldpeak','ST_Slope(Up,Flat,Down)']
+    patience_information = gui.multenterbox(msg=' Please input patient information', title=' Heart Failure Prediction', fields=features, values=[])
+    print(patience_information)
+    print(model_choice)
+
+
+def gui_visual():
+    
 
 if __name__ == '__main__':
-    data = read_data()
-    logisticRegression(data)
-    RandomForest(data)
-    EDA(data)
-    
+    df = pd.read_csv('heart.csv')
+    data = read_data(df)
+    # logisticRegression(data)
+    # RandomForest(data)
+    # EDA(data)
+    gui_visual()
 
