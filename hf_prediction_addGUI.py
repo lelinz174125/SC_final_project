@@ -194,6 +194,7 @@ def gui_visual():
     print(model_choice)
     new_input = DataFrame(patience_information).T
     
+
     print(new_input)
     new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
     if model_choice == 'Logistic Regression':
@@ -201,8 +202,8 @@ def gui_visual():
         new_pred_data = read_data(new_input)
         result = new_model.predict(new_pred_data)
         print(result)
-    elif model_choice =='Randomforest':
-        new_model = joblib.load("rf_model.joblib")
+    # elif model_choice =='Randomforest':
+    #     new_model = joblib.load("rf_model.joblib")
     # elif model_choice =='Desision Tree':
     #     new_model = joblib.load("model.joblib")
     # elif model_choice == 'Gaussian Naive Bayes':
