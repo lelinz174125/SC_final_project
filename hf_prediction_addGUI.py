@@ -175,7 +175,7 @@ def RandomForest(dataset):
     rf.fit(x_train,y_train)
     #利用训练模型进行预测
     y_pred=rf.predict(x_test)
-    joblib.dump(lr, "rf_model.joblib" ,compress=1)
+    joblib.dump(rf, "rf_model.joblib" ,compress=1)
     print(y_pred)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred)
@@ -193,14 +193,18 @@ def gui_visual():
     print(patience_information)
     print(model_choice)
     new_input = DataFrame(patience_information).T
-    
-
-    print(new_input)
     new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
+    new_input.insert(new_input.shape[1],'HeartDisease','0')
+    new_input.apply(pd.to_numeric, errors='ignore')
+    print(new_input)
+    new_input.info()
+    new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
+    print(new_input)
     if model_choice == 'Logistic Regression':
         new_model = joblib.load("lr_model.joblib")
         new_pred_data = read_data(new_input)
-        result = new_model.predict(new_pred_data)
+        x_new = new_pred_data.drop(['HeartDisease'], axis=1)
+        result = new_model.predict(x_new)
         print(result)
     # elif model_choice =='Randomforest':
     #     new_model = joblib.load("rf_model.joblib")
