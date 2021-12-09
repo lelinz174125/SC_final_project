@@ -6,30 +6,26 @@ import matplotlib.mlab as mlab
 import seaborn as sns 
 import easygui as gui
 import joblib
-
-
-
-
 from sklearn.preprocessing import StandardScaler 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn import tree
-import sklearn.metrics as metrics
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_recall_curve,precision_score, recall_score, f1_score
+from sklearn.metrics import precision_recall_curve 
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import auc
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
-
+from sklearn.metrics import roc_curve
 # from sklearn.pipeline import Pipeline
 # from sklearn.manifold import TSNE 
 # from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import classification_report
-
-from sklearn.metrics import roc_curve
-
 
 def read_data(df):
     '''
@@ -122,8 +118,8 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
 
 
 def ROC_curve(y_test, y_pred_proba,modelname):
-    fpr, tpr, _ = metrics.roc_curve(y_test, y_pred_proba[:,1])
-    roc_auc = metrics.auc(fpr, tpr)
+    fpr, tpr, _ = roc_curve(y_test, y_pred_proba[:,1])
+    roc_auc = auc(fpr, tpr)
     fig = plt.plot(fpr, tpr, 'b', label = '%s (AUC = %0.2f)' % (modelname,roc_auc))
     plt.plot([0, 1], [0, 1],'r--', label='No Skill Classifier')
     plt.plot([0, 0, 1], [0, 1, 1], linestyle=':', color='black', label='perfect performance')
@@ -323,8 +319,8 @@ if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
     logisticRegression(data)
-    # RandomForest(data)
-    # decision_tree(data)
-    # gaussian_nb(data)
-    # EDA(data)
+    RandomForest(data)
+    decision_tree(data)
+    gaussian_nb(data)
+    EDA(data)
     gui_visual()
