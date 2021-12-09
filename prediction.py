@@ -208,6 +208,23 @@ def decision_tree(dataset):
     Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
+
+
+def gaussian_nb(dataset):
+    x=dataset.drop(columns='HeartDisease')#dataset except target
+    y=dataset['HeartDisease']
+    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
+    GNB=GaussianNB()
+    GNB.fit(x_train, y_train)#training
+    y_pred=GNB.predict(x_test)
+    y_pred_proba=GNB.predict_proba(x_test)
+    joblib.dump(GNB, "gnb_model.joblib" ,compress=1)
+    plot_confusion_matrix(y_test,y_pred,'Gaussian Naive Bayes')
+    ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
+    PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
+    Scores(y_test,y_pred,y_pred_proba)
+    return y_test, y_pred, y_pred_proba
+
 def plot_learning_curve(dataset):
     
     x=dataset.drop(columns='HeartDisease')#dataset except target
@@ -287,21 +304,6 @@ def plot_learning_curve(dataset):
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
     plt.show()
-
-def gaussian_nb(dataset):
-    x=dataset.drop(columns='HeartDisease')#dataset except target
-    y=dataset['HeartDisease']
-    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
-    GNB=GaussianNB()
-    GNB.fit(x_train, y_train)#training
-    y_pred=GNB.predict(x_test)
-    y_pred_proba=GNB.predict_proba(x_test)
-    joblib.dump(GNB, "gnb_model.joblib" ,compress=1)
-    plot_confusion_matrix(y_test,y_pred,'Gaussian Naive Bayes')
-    ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
-    PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
-    Scores(y_test,y_pred,y_pred_proba)
-    return y_test, y_pred, y_pred_proba
 
 
 def gui_visual():
