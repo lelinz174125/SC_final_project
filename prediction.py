@@ -226,6 +226,8 @@ def gaussian_nb(dataset):
     return y_test, y_pred, y_pred_proba
 
 def plot_learning_curve(dataset):
+    plt.figure(figsize=(20,20))  
+    plt.subplots_adjust(bottom=.05,top=.9,left=.05,right=.95)
     
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']#target
@@ -235,9 +237,10 @@ def plot_learning_curve(dataset):
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
-    plt.figure()
+    plt.subplot(421)
     plt.xlabel("Training examples")
     plt.ylabel("Score")
+    plt.title("learning curves(Logistic Regression)",fontsize='small')
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
@@ -246,7 +249,8 @@ def plot_learning_curve(dataset):
     plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
-    plt.show()
+
+
     
     estimator2=RandomForestClassifier(n_estimators=10, n_jobs=2)
     train_sizes, train_scores, test_scores = learning_curve(estimator2, x, y)
