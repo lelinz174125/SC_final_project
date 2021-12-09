@@ -237,7 +237,7 @@ def decision_tree(dataset):
 
 def GUI():
     gui.msgbox('Thank you for this input')
-    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Randomforest','Desision Tree','Gaussian Naive Bayes'])
+    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Desision Tree','Gaussian Naive Bayes'])
     features = ['Age','Sex','ChestPainType(TA,ATA,ASY,NAP)','RestingBP','Cholesterol','FastingBS','RestingECG(Normal,ST,LVH)','MaxHR','ExerciseAngina','Oldpeak','ST_Slope(Up,Flat,Down)']
     patience_information = gui.multenterbox(msg=' Please input patient information', title=' Heart Failure Prediction', fields=features, values=[])
     gui.msgbox('Thank you for this input')
@@ -257,7 +257,7 @@ def GUI():
         x_new = new_pred_data.drop(['HeartDisease'], axis=1)
         result = new_model.predict(x_new)
         print(result)
-    elif model_choice =='Randomforest':
+    elif model_choice =='Random Forest':
         new_model = joblib.load("rf_model.joblib")
         new_pred_data = read_data(new_input)
         x_new = new_pred_data.drop(['HeartDisease'], axis=1)
