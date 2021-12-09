@@ -413,5 +413,6 @@ if __name__ == '__main__':
     RandomForest(data)
     decision_tree(data)
     gaussian_nb(data)
+    plot_learning_curve(data)
     EDA(data)
     gui_visual()
