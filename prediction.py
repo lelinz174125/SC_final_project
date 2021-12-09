@@ -26,6 +26,7 @@ from sklearn.metrics import roc_curve
 # from sklearn.manifold import TSNE 
 # from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import classification_report
+from sklearn.model_selection import learning_curve
 
 def read_data(df):
     '''
@@ -207,6 +208,85 @@ def decision_tree(dataset):
     Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
+def plot_learning_curve(dataset):
+    
+    x=dataset.drop(columns='HeartDisease')#dataset except target
+    y=dataset['HeartDisease']#target
+    estimator1=LogisticRegression(class_weight="balanced")
+    train_sizes, train_scores, test_scores = learning_curve(estimator1, x, y)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.figure()
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
+                         alpha=0.1, color="b") 
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
+                         alpha=0.1, color="r")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
+    
+    estimator2=RandomForestClassifier(n_estimators=10, n_jobs=2)
+    train_sizes, train_scores, test_scores = learning_curve(estimator2, x, y)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.figure()
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
+                         alpha=0.1, color="b") 
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
+                         alpha=0.1, color="r")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
+    
+    estimator3=DecisionTreeClassifier(random_state=0)
+    train_sizes, train_scores, test_scores = learning_curve(estimator3, x, y)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.figure()
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
+                         alpha=0.1, color="b") 
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
+                         alpha=0.1, color="r")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
+    
+    estimator4=GaussianNB()
+    train_sizes, train_scores, test_scores = learning_curve(estimator4, x, y)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.figure()
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
+                         alpha=0.1, color="b") 
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
+                         alpha=0.1, color="r")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
 
 def gaussian_nb(dataset):
     x=dataset.drop(columns='HeartDisease')#dataset except target
