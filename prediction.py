@@ -2,7 +2,6 @@ import pandas as pd
 from pandas.core.frame import DataFrame 
 import numpy as np 
 import matplotlib.pyplot as plt 
-import matplotlib.mlab as mlab  
 import seaborn as sns 
 import easygui as gui
 import joblib
@@ -23,7 +22,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
 # from sklearn.pipeline import Pipeline
-# from sklearn.manifold import TSNE 
+from sklearn.manifold import TSNE 
 # from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import classification_report
 from sklearn.model_selection import learning_curve
@@ -100,6 +99,30 @@ def EDA(dataset):
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
     plt.title('Spearman Correlation Heatmap')
     plt.show()
+
+
+def data_clean(dataset):
+    data 
+    pass
+
+
+def kmeans():
+    pass
+
+def t_SNE(dataset):
+    y_true = dataset['HeartDisease']
+    x_data = dataset.drop(columns='HeartDisease')
+
+    tsne = TSNE(verbose = 1, n_components=2, init='random', perplexity = 50, learning_rate=1000)
+    X_std = StandardScaler().fit_transform(x_data) 
+    X_tsne = tsne.fit_transform(x_data) 
+    X_tsne_data = np.vstack((X_tsne.T, y_true)).T 
+    df_tsne = pd.DataFrame(X_tsne_data, columns=['Dim1', 'Dim2','class']) 
+    df_tsne.head()
+    plt.figure(figsize=(8, 8)) 
+    sns.scatterplot(data=df_tsne, hue='class', x='Dim1', y='Dim2',s=4) 
+    plt.show()
+
 
 
 def plot_confusion_matrix(y_test, y_pred,modelname):
@@ -320,7 +343,10 @@ def prob_draw(positive,negative,fptr):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    EDA(data)
+    cleaned_data = data_clean(data)
+    # EDA(data)
+
+    t_SNE(data)
     # logisticRegression(data)
     # RandomForest(data)
     # decision_tree(data)
