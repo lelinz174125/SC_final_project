@@ -234,6 +234,22 @@ def decision_tree(dataset):
     rocauc_score(y_test, y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
+def gaussian_nb(dataset):
+    x=dataset.drop(columns='HeartDisease')#dataset except target
+    y=dataset['HeartDisease']
+    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
+    GNB=GaussianNB()
+    GNB.fit(x_train, y_train)#training
+    y_pred=GNB.predict(x_test)
+    y_pred_proba=GNB.predict_proba(x_test)
+    
+    plot_confusion_matrix(y_test,y_pred)
+    ROC_curve(y_test, y_pred_proba)
+    PR_curve(y_test, y_pred)
+    Scores(y_test,y_pred)
+    rocauc_score(y_test, y_pred_proba)
+    return y_test, y_pred, y_pred_proba
+
 
 def GUI():
     gui.msgbox('Thank you for this input')
