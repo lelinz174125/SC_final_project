@@ -291,5 +291,6 @@ if __name__ == '__main__':
     logisticRegression(data)
     RandomForest(data)
     decision_tree(data)
+    gaussian_nb(data)
     EDA(data)
     
