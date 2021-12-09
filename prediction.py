@@ -170,6 +170,8 @@ def logisticRegression(dataset):
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
     PR_curve(y_test, y_pred_proba,'Logistic Regression')
     Scores(y_test,y_pred,y_pred_proba)
+    data=read_data()
+    plot_learning_curve(data,lr)
     return y_test, y_pred, y_pred_proba
 
 
@@ -188,7 +190,9 @@ def RandomForest(dataset):
     plot_confusion_matrix(y_test,y_pred,'RandomForest')
     ROC_curve(y_test, y_pred_proba,'RandomForest')
     PR_curve(y_test, y_pred_proba,'RandomForest')
-    Scores(y_test,y_pred,y_pred_proba)    
+    Scores(y_test,y_pred,y_pred_proba)
+    data=read_data()
+    plot_learning_curve(data,rf)
     return y_test, y_pred, y_pred_proba
 
 
@@ -206,6 +210,8 @@ def decision_tree(dataset):
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
     PR_curve(y_test, y_pred_proba,'Decision Tree')
     Scores(y_test,y_pred,y_pred_proba)
+    data=read_data()
+    plot_learning_curve(data,model)
     return y_test, y_pred, y_pred_proba
 
 
@@ -223,24 +229,23 @@ def gaussian_nb(dataset):
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     Scores(y_test,y_pred,y_pred_proba)
+    data=read_data()
+    plot_learning_curve(data,GNB)
     return y_test, y_pred, y_pred_proba
 
-def plot_learning_curve(dataset):
-    plt.figure(figsize=(20,20))  
-    plt.subplots_adjust(bottom=.05,top=.9,left=.05,right=.95)
-    
+
+def plot_learning_curve(dataset, estimator):
+ 
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']#target
-    estimator1=LogisticRegression(class_weight="balanced")
-    train_sizes, train_scores, test_scores = learning_curve(estimator1, x, y)
+    train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
-    plt.subplot(421)
     plt.xlabel("Training examples")
     plt.ylabel("Score")
-    plt.title("learning curves(Logistic Regression)",fontsize='small')
+    plt.title("Learning Curve",fontsize='small')
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
@@ -250,68 +255,6 @@ def plot_learning_curve(dataset):
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
 
-
-    
-    estimator2=RandomForestClassifier(n_estimators=10, n_jobs=2)
-    train_sizes, train_scores, test_scores = learning_curve(estimator2, x, y)
-    train_scores_mean = np.mean(train_scores, axis=1)
-    train_scores_std = np.std(train_scores, axis=1)
-    test_scores_mean = np.mean(test_scores, axis=1)
-    test_scores_std = np.std(test_scores, axis=1)
-    plt.subplot(422)
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
-    plt.title("Random Forest Classifier(n_estimators=10, n_jobs=2))",
-              fontsize='small')
-    plt.grid()
-    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
-                         alpha=0.1, color="b") 
-    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
-                         alpha=0.1, color="r")
-    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
-    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
-    plt.legend(loc="best")
-
-    
-    estimator3=DecisionTreeClassifier(random_state=0)
-    train_sizes, train_scores, test_scores = learning_curve(estimator3, x, y)
-    train_scores_mean = np.mean(train_scores, axis=1)
-    train_scores_std = np.std(train_scores, axis=1)
-    test_scores_mean = np.mean(test_scores, axis=1)
-    test_scores_std = np.std(test_scores, axis=1)
-    plt.subplot(423)
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
-    plt.title("Decision Tree Classifier(random_state=0))",
-              fontsize='small')
-    plt.grid()
-    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
-                         alpha=0.1, color="b") 
-    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
-                         alpha=0.1, color="r")
-    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
-    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
-    plt.legend(loc="best")
-
-    
-    estimator4=GaussianNB()
-    train_sizes, train_scores, test_scores = learning_curve(estimator4, x, y)
-    train_scores_mean = np.mean(train_scores, axis=1)
-    train_scores_std = np.std(train_scores, axis=1)
-    test_scores_mean = np.mean(test_scores, axis=1)
-    test_scores_std = np.std(test_scores, axis=1)
-    plt.subplot(424)
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
-    plt.title("Gaussian Naive Bayes",fontsize='small')
-    plt.grid()
-    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
-                         alpha=0.1, color="b") 
-    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
-                         alpha=0.1, color="r")
-    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
-    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
-    plt.legend(loc="best")
     plt.show()
 
 
@@ -413,6 +356,5 @@ if __name__ == '__main__':
     RandomForest(data)
     decision_tree(data)
     gaussian_nb(data)
-    plot_learning_curve(data)
     EDA(data)
     gui_visual()
