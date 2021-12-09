@@ -182,7 +182,7 @@ def logisticRegression(dataset):
     # res2 = lr.fit()
     # res2.summary()
     y_pred_proba=lr.predict_proba(x_test)
-    joblib.dump(lr, "rf_model.joblib" ,compress=1)
+    joblib.dump(lr, "lr_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred_proba)
     PR_curve(y_test, y_pred)
@@ -206,7 +206,7 @@ def RandomForest(dataset):
     y_pred=rf.predict(x_test)
     print(y_pred)
     y_pred_proba=rf.predict_proba(x_test)
-    
+    joblib.dump(rf, "rf_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred_proba)
     PR_curve(y_test, y_pred)
@@ -257,8 +257,12 @@ def GUI():
         x_new = new_pred_data.drop(['HeartDisease'], axis=1)
         result = new_model.predict(x_new)
         print(result)
-    # elif model_choice =='Randomforest':
-    #     new_model = joblib.load("rf_model.joblib")
+    elif model_choice =='Randomforest':
+        new_model = joblib.load("rf_model.joblib")
+        new_pred_data = read_data(new_input)
+        x_new = new_pred_data.drop(['HeartDisease'], axis=1)
+        result = new_model.predict(x_new)
+        print(result)
     # elif model_choice =='Desision Tree':
     #     new_model = joblib.load("model.joblib")
     # elif model_choice == 'Gaussian Naive Bayes':
