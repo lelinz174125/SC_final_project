@@ -7,10 +7,12 @@ Created on Wed Dec  8 16:13:46 2021
 """
 
 import pandas as pd
+from pandas.core.frame import DataFrame 
 import numpy as np 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
-
+import easygui as gui
+import joblib
 from sklearn.model_selection import train_test_split
 # from sklearn.pipeline import Pipeline
 import sklearn.metrics as metrics
@@ -180,7 +182,7 @@ def logisticRegression(dataset):
     # res2 = lr.fit()
     # res2.summary()
     y_pred_proba=lr.predict_proba(x_test)
-    
+    joblib.dump(lr, "rf_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred)
     ROC_curve(y_test, y_pred_proba)
     PR_curve(y_test, y_pred)
@@ -234,7 +236,35 @@ def decision_tree(dataset):
 
 
 def GUI():
-    pass
+    gui.msgbox('Thank you for this input')
+    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Randomforest','Desision Tree','Gaussian Naive Bayes'])
+    features = ['Age','Sex','ChestPainType(TA,ATA,ASY,NAP)','RestingBP','Cholesterol','FastingBS','RestingECG(Normal,ST,LVH)','MaxHR','ExerciseAngina','Oldpeak','ST_Slope(Up,Flat,Down)']
+    patience_information = gui.multenterbox(msg=' Please input patient information', title=' Heart Failure Prediction', fields=features, values=[])
+    gui.msgbox('Thank you for this input')
+    print(patience_information)
+    print(model_choice)
+    new_input = DataFrame(patience_information).T
+    new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
+    new_input.insert(new_input.shape[1],'HeartDisease','0')
+    new_input.apply(pd.to_numeric, errors='ignore')
+    print(new_input)
+    new_input.info()
+    new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
+    print(new_input)
+    if model_choice == 'Logistic Regression':
+        new_model = joblib.load("lr_model.joblib")
+        new_pred_data = read_data(new_input)
+        x_new = new_pred_data.drop(['HeartDisease'], axis=1)
+        result = new_model.predict(x_new)
+        print(result)
+    # elif model_choice =='Randomforest':
+    #     new_model = joblib.load("rf_model.joblib")
+    # elif model_choice =='Desision Tree':
+    #     new_model = joblib.load("model.joblib")
+    # elif model_choice == 'Gaussian Naive Bayes':
+    #     new_model = joblib.load("model.joblib")
+    
+
 
 if __name__ == '__main__':
     data = read_data()
