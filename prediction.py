@@ -19,13 +19,10 @@ import sklearn.metrics as metrics
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler 
 # from sklearn.manifold import TSNE 
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix,precision_recall_curve,precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
+from sklearn.metrics import precision_recall_curve,precision_score, recall_score, f1_score,
 from sklearn.feature_selection import VarianceThreshold
-
-
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
@@ -33,7 +30,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import roc_auc_score
 from sklearn import tree
 from sklearn.metrics import confusion_matrix
-
+from sklearn.naive_bayes import GaussianNB
 
 def read_data():
     '''
