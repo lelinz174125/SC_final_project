@@ -209,7 +209,6 @@ def decision_tree(dataset):
     return y_test, y_pred, y_pred_proba
 
 
-
 def gaussian_nb(dataset):
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']
@@ -224,6 +223,7 @@ def gaussian_nb(dataset):
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
+
 
 def plot_learning_curve(dataset):
     plt.figure(figsize=(20,20))  
