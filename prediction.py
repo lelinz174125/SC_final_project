@@ -121,7 +121,8 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
 def ROC_curve(y_test, y_pred_proba,modelname):
     fpr, tpr, _ = roc_curve(y_test, y_pred_proba[:,1])
     roc_auc = auc(fpr, tpr)
-    fig = plt.plot(fpr, tpr, 'b', label = '%s (AUC = %0.2f)' % (modelname,roc_auc))
+    fig = plt.figure()
+    plt.plot(fpr, tpr, 'b', label = '%s (AUC = %0.2f)' % (modelname,roc_auc))
     plt.plot([0, 1], [0, 1],'r--', label='No Skill Classifier')
     plt.plot([0, 0, 1], [0, 1, 1], linestyle=':', color='black', label='perfect performance')
     plt.legend(loc = 'lower right')
@@ -135,7 +136,8 @@ def ROC_curve(y_test, y_pred_proba,modelname):
 def PR_curve(y_test, y_pred_proba,modelname):
     precision, recall, _= precision_recall_curve(y_test,y_pred_proba[:,1])
     no_skill = len(y_test[y_test==1]) / len(y_test)
-    fig = plt.plot(recall, precision, marker='.', label='%s ' % modelname)
+    fig = plt.figure()
+    plt.plot(recall, precision, marker='.', label='%s ' % modelname)
     plt.plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill Classifier')
     plt.xlabel('Recall')
     plt.ylabel('Precision')
@@ -154,6 +156,30 @@ def Scores(y_test,y_pred,y_pred_proba):
     return None
     
 
+def plot_learning_curve(dataset, estimator,modelname):
+    x=dataset.drop(columns='HeartDisease')#dataset except target
+    y=dataset['HeartDisease']#target
+    train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    fig = plt.figure()
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.title('Learning Curve: %s '% modelname, fontsize='small')
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
+                         alpha=0.1, color="b") 
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
+                         alpha=0.1, color="r")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
+    fig.savefig("%s_Learning_curve.png" % modelname)
+
+
 def logisticRegression(dataset):
     X = dataset.drop(['HeartDisease'], axis=1)
     Y = dataset['HeartDisease']
@@ -170,8 +196,7 @@ def logisticRegression(dataset):
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
     PR_curve(y_test, y_pred_proba,'Logistic Regression')
     Scores(y_test,y_pred,y_pred_proba)
-    data=read_data()
-    plot_learning_curve(data,lr)
+    plot_learning_curve(dataset,lr,'Logistic Regression')
     return y_test, y_pred, y_pred_proba
 
 
@@ -191,8 +216,7 @@ def RandomForest(dataset):
     ROC_curve(y_test, y_pred_proba,'RandomForest')
     PR_curve(y_test, y_pred_proba,'RandomForest')
     Scores(y_test,y_pred,y_pred_proba)
-    data=read_data()
-    plot_learning_curve(data,rf)
+    plot_learning_curve(dataset,rf,'RandomForest')
     return y_test, y_pred, y_pred_proba
 
 
@@ -210,10 +234,8 @@ def decision_tree(dataset):
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
     PR_curve(y_test, y_pred_proba,'Decision Tree')
     Scores(y_test,y_pred,y_pred_proba)
-    data=read_data()
-    plot_learning_curve(data,model)
+    plot_learning_curve(dataset,model,'Decision Tree')
     return y_test, y_pred, y_pred_proba
-
 
 
 def gaussian_nb(dataset):
@@ -229,32 +251,8 @@ def gaussian_nb(dataset):
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     Scores(y_test,y_pred,y_pred_proba)
-    data=read_data()
-    plot_learning_curve(data,GNB)
+    plot_learning_curve(dataset,GNB,'Gaussian Naive Bayes')
     return y_test, y_pred, y_pred_proba
-
-
-def plot_learning_curve(dataset, estimator):
-    x=dataset.drop(columns='HeartDisease')#dataset except target
-    y=dataset['HeartDisease']#target
-    train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
-    train_scores_mean = np.mean(train_scores, axis=1)
-    train_scores_std = np.std(train_scores, axis=1)
-    test_scores_mean = np.mean(test_scores, axis=1)
-    test_scores_std = np.std(test_scores, axis=1)
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
-    plt.title("Learning Curve",fontsize='small')
-    plt.grid()
-    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
-                         alpha=0.1, color="b") 
-    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
-                         alpha=0.1, color="r")
-    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
-    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
-    plt.legend(loc="best")
-
-    plt.show()
 
 
 def gui_visual():
@@ -266,84 +264,55 @@ def gui_visual():
         model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
         gui.msgbox('Click to see your predicted result')
         # print(patience_information)
-        # print(model_choice)
-        patience_information_p = ['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']
-        # patience_information_n = ['49', 'F', 'NAP', '160', '180', '0', 'Normal', '156', 'N', '1', 'Flat']
-        new_input = DataFrame(patience_information_p).T
+        # patience_information_p = ['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']
+        patience_information_n = ['49', 'F', 'NAP', '160', '180', '0', 'Normal', '156', 'N', '1', 'Flat']
+        new_input = DataFrame(patience_information_n).T
         new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
         new_input.insert(new_input.shape[1],'HeartDisease','0')
         new_input.apply(pd.to_numeric, errors='ignore')
         new_input.info()
         new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
-        
+
         if model_choice == 'Logistic Regression':
             new_model = joblib.load("lr_model.joblib")
-            new_pred_data = read_data(new_input)
-            x_new = new_pred_data.drop(['HeartDisease'], axis=1)
-            result = new_model.predict(x_new)
-            prob = new_model.predict_proba(x_new)
-            print(prob)
-            print(result)
-            name = prob_draw(prob[0][1],prob[0][0],model_choice)
-            image = name
-            msg = "This is the prediction of heart failure based on %s model" % model_choice
-            choices = ["Believe","Retest"]
-            cho =gui.buttonbox(msg, image=image, choices = choices)
+            cho = show_gui(new_input,new_model,model_choice)
             if cho == 'Believe':
                 end.append(cho)
-            break
         elif model_choice =='Random Forest':
             new_model = joblib.load("rf_model.joblib")
-            new_pred_data = read_data(new_input)
-            x_new = new_pred_data.drop(['HeartDisease'], axis=1)
-            result = new_model.predict(x_new)
-            prob = new_model.predict_proba(x_new)
-            name = prob_draw(prob[0][1],prob[0][0],model_choice)
-            image = name
-            msg = "This is the prediction of heart failure based on %s model" % model_choice
-            choices = ["Belive","Retest"]
-            cho =gui.buttonbox(msg, image=image, choices = choices)
+            cho = show_gui(new_input,new_model,model_choice)
             if cho == 'Believe':
                 end.append(cho)
-            break
         elif model_choice =='Decision Tree':
             new_model = joblib.load("dt_model.joblib")
-            new_pred_data = read_data(new_input)
-            x_new = new_pred_data.drop(['HeartDisease'], axis=1)
-            result = new_model.predict(x_new)
-            prob = new_model.predict_proba(x_new)
-            name = prob_draw(prob[0][1],prob[0][0],model_choice)
-            image = name
-            msg = "This is the prediction of heart failure based on %s model" % model_choice
-            choices = ["Belive","Retest"]
-            cho =gui.buttonbox(msg, image=image, choices = choices)
+            cho = show_gui(new_input,new_model,model_choice)
             if cho == 'Believe':
                 end.append(cho)
-            break
         elif model_choice == 'Gaussian Naive Bayes':
             new_model = joblib.load("gnb_model.joblib")
-            new_pred_data = read_data(new_input)
-            x_new = new_pred_data.drop(['HeartDisease'], axis=1)
-            result = new_model.predict(x_new)
-            prob = new_model.predict_proba(x_new)
-            name = prob_draw(prob[0][1],prob[0][0],model_choice)
-            image = name
-            msg = "This is the prediction of heart failure based on %s model" % model_choice
-            choices = ["Belive","Retest"]
-            cho =gui.buttonbox(msg, image=image, choices = choices)
+            cho = show_gui(new_input,new_model,model_choice)
             if cho == 'Believe':
                 end.append(cho)
-            break
-    
+
+
+def show_gui(new_input,new_model,model_choice):
+    new_pred_data = read_data(new_input)
+    x_new = new_pred_data.drop(['HeartDisease'], axis=1)
+    prob = new_model.predict_proba(x_new)
+    name = prob_draw(prob[0][1],prob[0][0],model_choice)
+    msg = "This is the prediction of heart failure based on %s model" % model_choice
+    choices = ["Believe","Retest"]
+    cho =gui.buttonbox(msg, image=name, choices = choices)
+    return cho
+
 
 def prob_draw(positive,negative,fptr):
     labels=['Predicted to have heart failure','Predicted healthy']
     X=[positive,negative]  
     colors = ['firebrick', 'olive']
-    fig = plt.figure(figsize=(6, 3))
-    plt.pie(X,labels=labels,autopct='%1.2f%%',colors = colors) #画饼图（数据，数据对应的标签，百分数保留两位小数点）
+    fig = plt.figure(figsize=(8, 4))
+    plt.pie(X,labels=labels,autopct='%1.2f%%',colors = colors) 
     plt.title("Pie chart of %s" % fptr)
-
     fig.savefig("%s_PieChart.png" % fptr)
     return "%s_PieChart.png" % fptr
 
@@ -351,9 +320,9 @@ def prob_draw(positive,negative,fptr):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    logisticRegression(data)
-    RandomForest(data)
-    decision_tree(data)
-    gaussian_nb(data)
     EDA(data)
-    gui_visual()
+    # logisticRegression(data)
+    # RandomForest(data)
+    # decision_tree(data)
+    # gaussian_nb(data)
+    # gui_visual()
