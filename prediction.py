@@ -235,7 +235,6 @@ def gaussian_nb(dataset):
 
 
 def plot_learning_curve(dataset, estimator):
- 
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']#target
     train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
