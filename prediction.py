@@ -258,9 +258,11 @@ def plot_learning_curve(dataset):
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
-    plt.figure()
+    plt.subplot(422)
     plt.xlabel("Training examples")
     plt.ylabel("Score")
+    plt.title("Random Forest Classifier(n_estimators=10, n_jobs=2))",
+              fontsize='small')
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
@@ -269,7 +271,7 @@ def plot_learning_curve(dataset):
     plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
-    plt.show()
+
     
     estimator3=DecisionTreeClassifier(random_state=0)
     train_sizes, train_scores, test_scores = learning_curve(estimator3, x, y)
@@ -277,9 +279,11 @@ def plot_learning_curve(dataset):
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
-    plt.figure()
+    plt.subplot(423)
     plt.xlabel("Training examples")
     plt.ylabel("Score")
+    plt.title("Decision Tree Classifier(random_state=0))",
+              fontsize='small')
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
@@ -288,7 +292,7 @@ def plot_learning_curve(dataset):
     plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
-    plt.show()
+
     
     estimator4=GaussianNB()
     train_sizes, train_scores, test_scores = learning_curve(estimator4, x, y)
@@ -296,9 +300,10 @@ def plot_learning_curve(dataset):
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
-    plt.figure()
+    plt.subplot(424)
     plt.xlabel("Training examples")
     plt.ylabel("Score")
+    plt.title("Gaussian Naive Bayes",fontsize='small')
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
