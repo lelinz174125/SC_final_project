@@ -1,10 +1,12 @@
 import pandas as pd
-from pandas.core.frame import DataFrame 
 import numpy as np 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 import easygui as gui
 import joblib
+from PIL import ImageTk
+from PIL import Image as PILImage
+from tkinter import * 
 from sklearn.preprocessing import StandardScaler 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -21,11 +23,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
-# from sklearn.pipeline import Pipeline
 from sklearn.manifold import TSNE 
-# from sklearn.feature_selection import VarianceThreshold
-from sklearn.metrics import classification_report
 from sklearn.model_selection import learning_curve
+from tkinter import *
+
 
 def read_data(df):
     '''
@@ -47,8 +48,6 @@ def read_data(df):
         ST_Slope: the slope of the peak exercise ST segment [Up: upsloping, Flat: flat, Down: downsloping]
         HeartDisease: output class [1: heart disease, 0: Normal]
     '''
-    df.info()
-    df.head(10)
     new_df = pd.DataFrame(columns=['Age','Sex',	'ChestPainType_TA','ChestPainType_ATA','ChestPainType_ASY',
                                 'ChestPainType_NAP','RestingBP','Cholesterol','FastingBS','RestingECG_Normal',
                                 'RestingECG_ST','RestingECG_LVH','MaxHR','ExerciseAngina','Oldpeak','ST_Slope_Up',
@@ -72,7 +71,6 @@ def read_data(df):
     new_df['ST_Slope_Flat']=df['ST_Slope']
     new_df['ST_Slope_Down']=df['ST_Slope']
     new_df['HeartDisease']=df['HeartDisease']
-
     new_df['Sex'].replace(['M','F'],[1.0, 0.0], inplace = True)
     new_df['ChestPainType_TA'].replace(['TA','ATA','ASY','NAP'],[1.0, 0.0, 0.0, 0.0], inplace = True)
     new_df['ChestPainType_ATA'].replace(['TA','ATA','ASY','NAP'],[0.0, 1.0, 0.0, 0.0], inplace = True)
@@ -85,9 +83,6 @@ def read_data(df):
     new_df['ST_Slope_Up'].replace(['Up','Flat','Down'],[1.0, 0.0, 0.0], inplace = True)
     new_df['ST_Slope_Flat'].replace(['Up','Flat','Down'],[0.0, 1.0, 0.0], inplace = True)
     new_df['ST_Slope_Down'].replace(['Up','Flat','Down'],[0.0, 0.0, 1.0], inplace = True)
-
-    # new_df.info()
-    # new_df.head(10)
     new_df.to_csv('heart_data_addressed.csv')
     return(new_df)
 
@@ -95,26 +90,30 @@ def read_data(df):
 def EDA(dataset):
     
     corr = dataset.corr(method = 'spearman')
-    plt.figure(figsize=(20,6))
+    fig = plt.figure(figsize=(20,6))
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
     plt.title('Spearman Correlation Heatmap')
     plt.show()
+    fig.savefig('feature_exploration.png')
 
 
 def data_clean(dataset):
-    data 
-    pass
+    
+    new_df = dataset.drop(['Age','Sex','ChestPainType_TA','ChestPainType_NAP','RestingBP','Cholesterol','FastingBS',
+                            'RestingECG_Normal','RestingECG_ST','RestingECG_LVH','ST_Slope_Down'], axis=1)
+    new_df.head(10)
+    new_df.info()
+    return new_df
 
 
 def kmeans():
     pass
 
+
 def t_SNE(dataset):
     y_true = dataset['HeartDisease']
     x_data = dataset.drop(columns='HeartDisease')
-
-    tsne = TSNE(verbose = 1, n_components=2, init='random', perplexity = 50, learning_rate=1000)
-    X_std = StandardScaler().fit_transform(x_data) 
+    tsne = TSNE(verbose = 1, n_components=2, init='random', perplexity = 50 , n_iter=1000, learning_rate=10)
     X_tsne = tsne.fit_transform(x_data) 
     X_tsne_data = np.vstack((X_tsne.T, y_true)).T 
     df_tsne = pd.DataFrame(X_tsne_data, columns=['Dim1', 'Dim2','class']) 
@@ -122,7 +121,6 @@ def t_SNE(dataset):
     plt.figure(figsize=(8, 8)) 
     sns.scatterplot(data=df_tsne, hue='class', x='Dim1', y='Dim2',s=4) 
     plt.show()
-
 
 
 def plot_confusion_matrix(y_test, y_pred,modelname):
@@ -137,7 +135,7 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
     plt.ylabel('Actuals', fontsize=10)
     plt.title('Confusion Matrix: %s '% modelname, fontsize=12)
     plt.show()
-    fig.savefig("%s_confusion_matrix.png" % modelname)
+    fig.savefig('%s_confusion_matrix.png' % modelname)
     return None
 
 
@@ -277,45 +275,130 @@ def gaussian_nb(dataset):
     plot_learning_curve(dataset,GNB,'Gaussian Naive Bayes')
     return y_test, y_pred, y_pred_proba
 
+  
+def tgui():
+    pada = pd.DataFrame(np.array([['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']])
+                        ,columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS',
+                        'RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope'])
+    def clicked():
+        pada['Age']=age.get()
+        pada['Sex']=sex.get()
+        pada['ChestPainType']=ChestPainType.get()
+        pada['RestingBP'] = RestingBP.get()
+        pada['Cholesterol']=Cholesterol.get()
+        pada['FastingBS']=FastingBS.get()
+        pada['RestingECG']=RestingECG.get()
+        pada['MaxHR']=MaxHR.get()
+        pada['ExerciseAngina']=ExerciseAngina.get()
+        pada['Oldpeak']=Oldpeak.get()
+        pada['ST_Slope']=ST_Slope.get()
+        pada['Sex'].replace([1,2],['M', 'F'], inplace = True)
+        pada['ChestPainType'].replace([1,2,3,4],['TA','ATA','ASY','NAP'], inplace = True)
+        pada['RestingECG'].replace([1,2,3],['Normal','ST','LVH'], inplace = True)
+        pada['ExerciseAngina'].replace([1,2], ['Y','N'],inplace = True)
+        pada['ST_Slope'].replace([1,2,3], ['Up','Flat','Down'],inplace = True)
+        print(pada)
+        frame1.quit()
 
-def gui_visual():
-    end = []
-    while len(end) == 0: 
-        gui.msgbox('Please Input patients information')
-        # features = ['Age','Sex','ChestPainType(TA,ATA,ASY,NAP)','RestingBP','Cholesterol','FastingBS','RestingECG(Normal,ST,LVH)','MaxHR','ExerciseAngina','Oldpeak','ST_Slope(Up,Flat,Down)']
-        # patience_information = gui.multenterbox(msg=' Please input patient information', title=' Heart Failure Prediction', fields=features, values=[])
-        model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
-        gui.msgbox('Click to see your predicted result')
-        # print(patience_information)
-        # patience_information_p = ['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']
-        patience_information_n = ['49', 'F', 'NAP', '160', '180', '0', 'Normal', '156', 'N', '1', 'Flat']
-        new_input = DataFrame(patience_information_n).T
-        new_input.columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS','RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope']
-        new_input.insert(new_input.shape[1],'HeartDisease','0')
-        new_input.apply(pd.to_numeric, errors='ignore')
-        new_input.info()
-        new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
+    toop = Tk()
+    toop.title("Heart Failure Prediction")
+    Label(toop,text="Please input patient information").pack()
+    frame1 = Frame(toop)
 
-        if model_choice == 'Logistic Regression':
-            new_model = joblib.load("lr_model.joblib")
-            cho = show_gui(new_input,new_model,model_choice)
-            if cho == 'Believe':
-                end.append(cho)
-        elif model_choice =='Random Forest':
-            new_model = joblib.load("rf_model.joblib")
-            cho = show_gui(new_input,new_model,model_choice)
-            if cho == 'Believe':
-                end.append(cho)
-        elif model_choice =='Decision Tree':
-            new_model = joblib.load("dt_model.joblib")
-            cho = show_gui(new_input,new_model,model_choice)
-            if cho == 'Believe':
-                end.append(cho)
-        elif model_choice == 'Gaussian Naive Bayes':
-            new_model = joblib.load("gnb_model.joblib")
-            cho = show_gui(new_input,new_model,model_choice)
-            if cho == 'Believe':
-                end.append(cho)
+    age = StringVar()
+    Label(frame1,text="Age").grid(row=0,column=0,sticky=W)
+    Entry(frame1,text="请输入内容",textvariable=age).grid(row=1,column=0)
+  
+
+    Label(frame1,text="Sex:").grid(row=2,column=0,sticky=W)
+    list1 = [("M", 1),("F", 2)]
+    sex = IntVar()
+    i = 3
+    for num1, check1 in list1:
+        Radiobutton(frame1, text=num1, variable=sex,value=check1).grid(row=i, column=0, sticky=W)
+        i += 1
+
+    Label(frame1,text="ChestPainType:").grid(row=i+1,column=0,sticky=W)
+    list2 = [("TA", 1),("ATA", 2),("ASY", 3),("NAP", 4)]
+    ChestPainType = IntVar()
+    k = i+3
+    for num2, check2 in list2:
+        Radiobutton(frame1, text=num2, variable=ChestPainType,value=check2).grid(row=k, column=0, sticky=W)
+        k += 1
+
+    RestingBP = StringVar()
+    Label(frame1,text="RestingBP:").grid(row=k+1,column=0,sticky=W)
+    Entry(frame1,text="Input",textvariable=RestingBP).grid(row=k+2,column=0)
+
+    Cholesterol = StringVar()
+    Label(frame1,text="Cholesterol:").grid(row=k+3,column=0,sticky=W)
+    Entry(frame1,text="Input",textvariable=Cholesterol ).grid(row=k+4,column=0)
+
+    FastingBS = StringVar()
+    Label(frame1,text="FastingBS:").grid(row=k+5,column=0,sticky=W)
+    Entry(frame1,text="Input",textvariable=FastingBS).grid(row=k+6,column=0)
+
+    Label(frame1,text="RestingECG:").grid(row=k+7,column=0,sticky=W)
+    list3 = [("Normal", 1),("ST", 2),("LVH", 3),]
+    RestingECG = IntVar()
+    a = k+8
+    for num3, check3 in list3:
+        Radiobutton(frame1, text=num3, variable=RestingECG,value=check3).grid(row=a, column=0, sticky=W)
+        a += 1
+
+    MaxHR = StringVar()
+    Label(frame1,text="MaxHR").grid(row=a+1,column=0,sticky=W)
+    Entry(frame1,text="Input",textvariable=MaxHR).grid(row=a+2,column=0)
+
+    Label(frame1,text="ExerciseAngina").grid(row=a+3,column=0,sticky=W)
+    list4 = [("Yes", 1),("No", 2)]
+    ExerciseAngina = IntVar()
+    b = a+4
+    for num4, check4 in list4:
+        Radiobutton(frame1, text=num4, variable=ExerciseAngina,value=check4).grid(row=b, column=0, sticky=W)
+        b += 1
+
+    Oldpeak = StringVar()
+    Label(frame1,text="Oldpeak").grid(row=b+1,column=0,sticky=W)
+    Entry(frame1,text="Input",textvariable=Oldpeak).grid(row=b+2,column=0)
+
+    Label(frame1,text="ST_Slope").grid(row=b+3,column=0,sticky=W)
+    list4 = [("Up", 1),("Flat", 2),('Down',3)]
+    ST_Slope = IntVar()
+    c = b+4
+    for num4, check4 in list4:
+        Radiobutton(frame1, text=num4, variable=ST_Slope,value=check4).grid(row=c, column=0, sticky=W)
+        c += 1
+
+    frame1.pack(padx=20,pady=20)
+    Button(toop,text="Submit",bg="blue",fg="white",command=clicked).pack(side=BOTTOM)
+    # Button(toop,text="Quit",bg="blue",fg="white",command=quit).pack(side=BOTTOM)
+    mainloop()
+    return pada
+
+
+def gui_visual(new_input):
+    new_input.insert(new_input.shape[1],'HeartDisease','0')
+    new_input.apply(pd.to_numeric, errors='ignore')
+    new_input.info()
+    new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
+    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
+    gui.msgbox('Click to see your predicted result')
+    if model_choice == 'Logistic Regression':
+        new_model = joblib.load("lr_model.joblib")
+        show_gui(new_input,new_model,model_choice)
+        
+    elif model_choice =='Random Forest':
+        new_model = joblib.load("rf_model.joblib")
+        show_gui(new_input,new_model,model_choice)
+        
+    elif model_choice =='Decision Tree':
+        new_model = joblib.load("dt_model.joblib")
+        show_gui(new_input,new_model,model_choice)
+        
+    elif model_choice == 'Gaussian Naive Bayes':
+        new_model = joblib.load("gnb_model.joblib")
+        show_gui(new_input,new_model,model_choice)
 
 
 def show_gui(new_input,new_model,model_choice):
@@ -323,11 +406,13 @@ def show_gui(new_input,new_model,model_choice):
     x_new = new_pred_data.drop(['HeartDisease'], axis=1)
     prob = new_model.predict_proba(x_new)
     name = prob_draw(prob[0][1],prob[0][0],model_choice)
-    msg = "This is the prediction of heart failure based on %s model" % model_choice
-    choices = ["Believe","Retest"]
-    cho =gui.buttonbox(msg, image=name, choices = choices)
-    return cho
-
+    frame2 = Toplevel()
+    im=PILImage.open(name)
+    img=ImageTk.PhotoImage(im)
+    Label(frame2,image=img).pack()
+    Button(frame2,text="Quit",command=quit).pack(side=BOTTOM)
+    mainloop()
+    
 
 def prob_draw(positive,negative,fptr):
     labels=['Predicted to have heart failure','Predicted healthy']
@@ -335,7 +420,7 @@ def prob_draw(positive,negative,fptr):
     colors = ['firebrick', 'olive']
     fig = plt.figure(figsize=(8, 4))
     plt.pie(X,labels=labels,autopct='%1.2f%%',colors = colors) 
-    plt.title("Pie chart of %s" % fptr)
+    plt.title("Predicted results: %s" % fptr)
     fig.savefig("%s_PieChart.png" % fptr)
     return "%s_PieChart.png" % fptr
 
@@ -343,12 +428,12 @@ def prob_draw(positive,negative,fptr):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    cleaned_data = data_clean(data)
     # EDA(data)
-
-    t_SNE(data)
+    # cleaned_data = data_clean(data)
+    # t_SNE(cleaned_data)
     # logisticRegression(data)
     # RandomForest(data)
     # decision_tree(data)
     # gaussian_nb(data)
-    # gui_visual()
+    new_patient_info = tgui()
+    gui_visual(new_patient_info)
