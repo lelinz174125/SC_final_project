@@ -134,8 +134,7 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
     plt.xlabel('Predictions', fontsize=10)
     plt.ylabel('Actuals', fontsize=10)
     plt.title('Confusion Matrix: %s '% modelname, fontsize=12)
-    plt.show()
-    fig.savefig('%s_confusion_matrix.png' % modelname)
+    fig.savefig('Figure/%s_confusion_matrix.png' % modelname)
     return None
 
 
@@ -150,8 +149,7 @@ def ROC_curve(y_test, y_pred_proba,modelname):
     plt.title('ROC Curve: %s '% modelname)
     plt.ylabel('True Positive Rate (sensitivity)')
     plt.xlabel('False Positive Rate (1-specificity)')
-    plt.show()
-    fig.savefig("%s_ROC_curve.png" % modelname)
+    fig.savefig("Figure/%s_ROC_curve.png" % modelname)
     
 
 def PR_curve(y_test, y_pred_proba,modelname):
@@ -164,8 +162,7 @@ def PR_curve(y_test, y_pred_proba,modelname):
     plt.ylabel('Precision')
     plt.title('PR Curve: %s '% modelname)
     plt.legend()
-    plt.show()
-    fig.savefig("%s_PR_curve.png" % modelname)
+    fig.savefig("Figure/%s_PR_curve.png" % modelname)
 
 
 def Scores(y_test,y_pred,y_pred_proba):
@@ -197,8 +194,7 @@ def plot_learning_curve(dataset, estimator,modelname):
     plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
     plt.legend(loc="best")
-    plt.show()
-    fig.savefig("%s_Learning_curve.png" % modelname)
+    fig.savefig("Figure/%s_Learning_curve.png" % modelname)
 
 
 def logisticRegression(dataset):
@@ -212,7 +208,7 @@ def logisticRegression(dataset):
     lr.fit(x_train,y_train)
     y_pred=lr.predict(x_test)
     y_pred_proba=lr.predict_proba(x_test)
-    joblib.dump(lr, "lr_model.joblib" ,compress=1)
+    joblib.dump(lr, "Model/lr_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Logistic Regression')
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
     PR_curve(y_test, y_pred_proba,'Logistic Regression')
@@ -232,7 +228,7 @@ def RandomForest(dataset):
     rf.fit(x_train,y_train)
     y_pred=rf.predict(x_test)
     y_pred_proba=rf.predict_proba(x_test)
-    joblib.dump(rf, "rf_model.joblib" ,compress=1)
+    joblib.dump(rf, "Model/rf_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'RandomForest')
     ROC_curve(y_test, y_pred_proba,'RandomForest')
     PR_curve(y_test, y_pred_proba,'RandomForest')
@@ -250,7 +246,7 @@ def decision_tree(dataset):
     y_pred=model.predict(x_test)
     y_pred_proba=model.predict_proba(x_test)
     tree.plot_tree(model)
-    joblib.dump(model, "dt_model.joblib" ,compress=1)
+    joblib.dump(model, "Model/dt_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Decision Tree')
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
     PR_curve(y_test, y_pred_proba,'Decision Tree')
@@ -267,7 +263,7 @@ def gaussian_nb(dataset):
     GNB.fit(x_train, y_train)#training
     y_pred=GNB.predict(x_test)
     y_pred_proba=GNB.predict_proba(x_test)
-    joblib.dump(GNB, "gnb_model.joblib" ,compress=1)
+    joblib.dump(GNB, "Model/gnb_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Gaussian Naive Bayes')
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
@@ -276,7 +272,7 @@ def gaussian_nb(dataset):
     return y_test, y_pred, y_pred_proba
 
   
-def tgui():
+def input_gui():
     pada = pd.DataFrame(np.array([['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']])
                         ,columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS',
                         'RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope'])
@@ -377,7 +373,7 @@ def tgui():
     return pada
 
 
-def gui_visual(new_input):
+def visual_gui(new_input):
     new_input.insert(new_input.shape[1],'HeartDisease','0')
     new_input.apply(pd.to_numeric, errors='ignore')
     new_input.info()
@@ -421,8 +417,8 @@ def prob_draw(positive,negative,fptr):
     fig = plt.figure(figsize=(8, 4))
     plt.pie(X,labels=labels,autopct='%1.2f%%',colors = colors) 
     plt.title("Predicted results: %s" % fptr)
-    fig.savefig("%s_PieChart.png" % fptr)
-    return "%s_PieChart.png" % fptr
+    fig.savefig("Figure/%s_PieChart.png" % fptr)
+    return "Figure/%s_PieChart.png" % fptr
 
 
 if __name__ == '__main__':
@@ -431,9 +427,9 @@ if __name__ == '__main__':
     # EDA(data)
     # cleaned_data = data_clean(data)
     # t_SNE(cleaned_data)
-    # logisticRegression(data)
-    # RandomForest(data)
-    # decision_tree(data)
-    # gaussian_nb(data)
-    new_patient_info = tgui()
-    gui_visual(new_patient_info)
+    logisticRegression(data)
+    RandomForest(data)
+    decision_tree(data)
+    gaussian_nb(data)
+    # new_patient_info = input_gui()
+    # visual_gui(new_patient_info)
