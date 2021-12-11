@@ -11,7 +11,8 @@ Machine learning algorithms such as logistic regression, random forests are poss
 
 ## How our data look like ?
 
-<img width="375" height="802.08" src=https://github.com/lelinz174125/SC_final_project/Figure/data.png>
+<img width="800" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/f56c61355279b259daaa18fd1e766cd7bdaf0d24/Figure/data.png>
+
 
 
 ***The following demonstration***
