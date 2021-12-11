@@ -211,8 +211,8 @@ def logisticRegression(dataset):
     plot_confusion_matrix(y_test,y_pred,'Logistic Regression')
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
     PR_curve(y_test, y_pred_proba,'Logistic Regression')
-    Scores(y_test,y_pred,y_pred_proba)
     plot_learning_curve(dataset,lr,'Logistic Regression')
+    Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
 
@@ -231,8 +231,8 @@ def RandomForest(dataset):
     plot_confusion_matrix(y_test,y_pred,'RandomForest')
     ROC_curve(y_test, y_pred_proba,'RandomForest')
     PR_curve(y_test, y_pred_proba,'RandomForest')
-    Scores(y_test,y_pred,y_pred_proba)
     plot_learning_curve(dataset,rf,'RandomForest')
+    Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
 
@@ -249,8 +249,8 @@ def decision_tree(dataset):
     plot_confusion_matrix(y_test,y_pred,'Decision Tree')
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
     PR_curve(y_test, y_pred_proba,'Decision Tree')
-    Scores(y_test,y_pred,y_pred_proba)
     plot_learning_curve(dataset,model,'Decision Tree')
+    Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
 
@@ -266,8 +266,8 @@ def gaussian_nb(dataset):
     plot_confusion_matrix(y_test,y_pred,'Gaussian Naive Bayes')
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
-    Scores(y_test,y_pred,y_pred_proba)
     plot_learning_curve(dataset,GNB,'Gaussian Naive Bayes')
+    Scores(y_test,y_pred,y_pred_proba)
     return y_test, y_pred, y_pred_proba
 
   
@@ -380,19 +380,19 @@ def visual_gui(new_input):
     model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
     gui.msgbox('Click to see your predicted result')
     if model_choice == 'Logistic Regression':
-        new_model = joblib.load("lr_model.joblib")
+        new_model = joblib.load("Model/lr_model.joblib")
         show_gui(new_input,new_model,model_choice)
         
     elif model_choice =='Random Forest':
-        new_model = joblib.load("rf_model.joblib")
+        new_model = joblib.load("Model/rf_model.joblib")
         show_gui(new_input,new_model,model_choice)
         
     elif model_choice =='Decision Tree':
-        new_model = joblib.load("dt_model.joblib")
+        new_model = joblib.load("Model/dt_model.joblib")
         show_gui(new_input,new_model,model_choice)
         
     elif model_choice == 'Gaussian Naive Bayes':
-        new_model = joblib.load("gnb_model.joblib")
+        new_model = joblib.load("Model/gnb_model.joblib")
         show_gui(new_input,new_model,model_choice)
 
 
@@ -423,12 +423,12 @@ def prob_draw(positive,negative,fptr):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    EDA(data)
+    # EDA(data)
     # cleaned_data = data_clean(data)
     # t_SNE(cleaned_data)
     # logisticRegression(data)
     # RandomForest(data)
     # decision_tree(data)
     # gaussian_nb(data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
+    new_patient_info = input_gui()
+    visual_gui(new_patient_info)

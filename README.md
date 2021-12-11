@@ -10,34 +10,33 @@ Machine learning algorithms such as logistic regression, random forests are poss
    GUI Interface: ```tkinter``` ``` easygui``` 
 
 ## How our data look like ?
+***The original dataframe***
+<img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/f56c61355279b259daaa18fd1e766cd7bdaf0d24/Figure/data.png>
 
-<img width="800" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/f56c61355279b259daaa18fd1e766cd7bdaf0d24/Figure/data.png>
+***The heatmap shows the correlation between features and outcome***
+<img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/feature_exploration.png>
 
 
+## How our Machine learning model look like ?
+***Use logistic regression as an example***
 
-***The following demonstration***
+Precision: 0.893
+Recall: 0.876
+Accuracy: 0.870
+F1 Score: 0.885
+ROC-AUC Score: 0.913
 
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_ROC_curve.png>   
+
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_PR_curve.png>   
+
+<img width="400" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_confusion_matrix.png>   
+
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_Learning_curve.png>   
 
 
 ## How can this script help you predict the heart failure?
-
-
-
-
-
-
-<!-- 
-After running, you can get the answer picture named as 'yarn_5_solved.png', which looks like   
-
-
-<img width="375" height="450" src=https://github.com/lelinz174125/Lazor_Project/blob/main/IMG/yarn_5_solved.png>   
-
-
-And for 'mad_1', the answer looks like:    
-
-
-<img width="375" height="375" src=https://github.com/lelinz174125/Lazor_Project/blob/main/IMG/mad_1_solved.png>   -->
-   -->
+***Use logistic regression as an example***
 
 
 ## Contributors
