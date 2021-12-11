@@ -13,6 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn import tree
+from sklearn.manifold import TSNE 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_curve 
 from sklearn.metrics import precision_score
@@ -23,7 +24,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
-from sklearn.manifold import TSNE 
 from sklearn.model_selection import learning_curve
 
 
@@ -31,21 +31,13 @@ def read_data(df):
     '''
     This function read a dataframe and return a new datafram with only numbers 
 
-    The features in the data set incluses
-        Age: age of the patient [years]
-        Sex: sex of the patient [1: Male, 0: Female]
-        ChestPainType: chest pain type [TA: Typical Angina, ATA: Atypical Angina, NAP: Non-Anginal Pain, ASY: Asymptomatic]
-        RestingBP: resting blood pressure [mm Hg]
-        Cholesterol: serum cholesterol [mm/dl]
-        FastingBS: fasting blood sugar [1: if FastingBS > 120 mg/dl, 0: otherwise]
-        RestingECG: resting electrocardiogram results [Normal: Normal, ST: having ST-T wave abnormality 
-                    (T wave inversions and/or ST elevation or depression of > 0.05 mV), LVH: showing probable 
-                    or definite left ventricular hypertrophy by Estes' criteria]
-        MaxHR: maximum heart rate achieved [Numeric value between 60 and 202]
-        ExerciseAngina: exercise-induced angina [1: Yes, 0: No]
-        Oldpeak: oldpeak = ST [Numeric value measured in depression]
-        ST_Slope: the slope of the peak exercise ST segment [Up: upsloping, Flat: flat, Down: downsloping]
-        HeartDisease: output class [1: heart disease, 0: Normal]
+    **Parameters**
+        df: *dataframe*
+            The original dataframe from the open database
+
+    **Return**
+        new_df: *dataframe*
+            Transform all the data into number
     '''
     new_df = pd.DataFrame(columns=['Age','Sex',	'ChestPainType_TA','ChestPainType_ATA','ChestPainType_ASY',
                                 'ChestPainType_NAP','RestingBP','Cholesterol','FastingBS','RestingECG_Normal',
@@ -87,7 +79,16 @@ def read_data(df):
 
 
 def EDA(dataset):
-    
+    '''
+    This function read a data set and figure out the potential relationship in data set 
+
+    **Parameters**
+        dataset: *dataframe*
+            The roughly addressed dataframe
+
+    **Return**
+        None
+    '''
     corr = dataset.corr(method = 'spearman')
     fig = plt.figure(figsize=(20,6))
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
@@ -97,7 +98,17 @@ def EDA(dataset):
 
 
 def data_clean(dataset):
-    
+    '''
+    This function read a dataframe and return a new datafram with only important features
+
+    **Parameters**
+        dataset: *dataframe*
+            The roughly addressed dataframe
+
+    **Return**
+        new_df: *dataframe*
+            A new data frame that exclude the less relative columns
+    '''
     new_df = dataset.drop(['Age','Sex','ChestPainType_TA','ChestPainType_NAP','RestingBP','Cholesterol','FastingBS',
                             'RestingECG_Normal','RestingECG_ST','RestingECG_LVH','ST_Slope_Down'], axis=1)
     new_df.head(10)
@@ -110,6 +121,17 @@ def kmeans():
 
 
 def t_SNE(dataset):
+    '''
+    This function read a dataset and visualize the high dimensional data through 
+    reduce it into two dimension
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     y_true = dataset['HeartDisease']
     x_data = dataset.drop(columns='HeartDisease')
     tsne = TSNE(verbose = 1, n_components=2, init='random', perplexity = 50 , n_iter=1000, learning_rate=10)
@@ -123,7 +145,21 @@ def t_SNE(dataset):
 
 
 def plot_confusion_matrix(y_test, y_pred,modelname):
-    
+    '''
+    This function read the true outcome and the predicted outcome,
+    and draw a confusion matrix of specific model
+
+    **Parameters**
+        y_test: *array*
+            The real outcome
+        y_pred: *array*
+            The predicted outcome
+        modelname: *str*
+            The name of model
+
+    **Return**
+        None
+    '''
     conf_matrix = confusion_matrix(y_true=y_test, y_pred=y_pred)
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.matshow(conf_matrix, cmap='GnBu', alpha=0.75)
@@ -134,10 +170,24 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
     plt.ylabel('Actuals', fontsize=10)
     plt.title('Confusion Matrix: %s '% modelname, fontsize=12)
     fig.savefig('Figure/%s_confusion_matrix.png' % modelname)
-    return None
 
 
 def ROC_curve(y_test, y_pred_proba,modelname):
+    '''
+    This function read the true outcome and the probablity of the positive predicted outcomes,
+    and draw a ROC curve of specific model
+
+    **Parameters**
+        y_test: *array*
+            The real outcome
+        y_pred: *array*
+            The probablity of the positive predicted outcomes
+        modelname: *str*
+            The name of model
+
+    **Return**
+        None
+    '''
     fpr, tpr, _ = roc_curve(y_test, y_pred_proba[:,1])
     roc_auc = auc(fpr, tpr)
     fig = plt.figure()
@@ -152,6 +202,21 @@ def ROC_curve(y_test, y_pred_proba,modelname):
     
 
 def PR_curve(y_test, y_pred_proba,modelname):
+    '''
+    This function read the true outcome and the probablity of the positive predicted outcomes,
+    and draw a ROC curve of specific model
+
+    **Parameters**
+        y_test: *array*
+            The real outcome
+        y_pred: *array*
+            The probablity of the positive predicted outcomes
+        modelname: *str*
+            The name of model
+
+    **Return**
+        None
+    '''
     precision, recall, _= precision_recall_curve(y_test,y_pred_proba[:,1])
     no_skill = len(y_test[y_test==1]) / len(y_test)
     fig = plt.figure()
@@ -165,6 +230,22 @@ def PR_curve(y_test, y_pred_proba,modelname):
 
 
 def Scores(y_test,y_pred,y_pred_proba):
+    '''
+    This function read the true outcome, the predicted outcome 
+    and the probablity of the positive predicted outcomes. 
+    Then, it give back the precison, recall, F1 score and the ROC-AUC score of the model.
+
+    **Parameters**
+        y_test: *array*
+            The real outcome
+        y_pred: *array*
+            The probablity of the positive predicted outcomes
+        modelname: *str*
+            The name of model
+
+    **Return**
+        None
+    '''
     print('Precision: %.3f' % precision_score(y_test, y_pred))
     print('Recall: %.3f' % recall_score(y_test, y_pred))
     print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
@@ -174,6 +255,20 @@ def Scores(y_test,y_pred,y_pred_proba):
     
 
 def plot_learning_curve(dataset, estimator,modelname):
+    '''
+    This function read the dataset and give back its learning curve based on specific model.
+
+    **Parameters**
+        dataset: *dataframe*
+            The dataframe used for model fitting
+        estimator: *array*
+            The fitting model
+        modelname: *str*
+            The name of model
+
+    **Return**
+        None
+    '''
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']#target
     train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
@@ -197,6 +292,16 @@ def plot_learning_curve(dataset, estimator,modelname):
 
 
 def logisticRegression(dataset):
+    '''
+    This function read a dataset and train it on logistic regression model.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     X = dataset.drop(['HeartDisease'], axis=1)
     Y = dataset['HeartDisease']
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
@@ -217,6 +322,16 @@ def logisticRegression(dataset):
 
 
 def RandomForest(dataset):
+    '''
+    This function read a dataset and train it on random forest model.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     X = dataset.drop(['HeartDisease'], axis=1)
     Y = dataset['HeartDisease']
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
@@ -237,6 +352,16 @@ def RandomForest(dataset):
 
 
 def decision_tree(dataset):
+    '''
+    This function read a dataset and train it on decision tree model.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']
     x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
@@ -255,6 +380,16 @@ def decision_tree(dataset):
 
 
 def gaussian_nb(dataset):
+    '''
+    This function read a dataset and train it on gaussian naive bayes model.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']
     x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
@@ -272,6 +407,18 @@ def gaussian_nb(dataset):
 
   
 def input_gui():
+    '''
+    This function constructure a GUI interface 
+    and allow people input a new patient value through the interface.
+    The information of new patient will be returned.
+
+    **Parameters**
+         None
+
+    **Return**
+        pada: *dataframe*
+            The information of new patient
+    '''
     pada = pd.DataFrame(np.array([['40', 'M', 'ATA', '140', '289', '0', 'Normal', '172', 'N', '0', 'Up']])
                         ,columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS',
                         'RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope'])
@@ -373,6 +520,16 @@ def input_gui():
 
 
 def visual_gui(new_input):
+    '''
+    This function constructure a GUI interface and allow people to choose a ML model
+
+    **Parameters**
+        new_input: *dataframe*
+            The information of new patient
+
+    **Return**
+        None
+    '''
     new_input.insert(new_input.shape[1],'HeartDisease','0')
     new_input.apply(pd.to_numeric, errors='ignore')
     new_input.info()
@@ -382,21 +539,32 @@ def visual_gui(new_input):
     if model_choice == 'Logistic Regression':
         new_model = joblib.load("Model/lr_model.joblib")
         show_gui(new_input,new_model,model_choice)
-        
     elif model_choice =='Random Forest':
         new_model = joblib.load("Model/rf_model.joblib")
         show_gui(new_input,new_model,model_choice)
-        
     elif model_choice =='Decision Tree':
         new_model = joblib.load("Model/dt_model.joblib")
         show_gui(new_input,new_model,model_choice)
-        
     elif model_choice == 'Gaussian Naive Bayes':
         new_model = joblib.load("Model/gnb_model.joblib")
         show_gui(new_input,new_model,model_choice)
 
 
 def show_gui(new_input,new_model,model_choice):
+    '''
+    This function constructure a GUI interface and exhibit the predcition results
+
+    **Parameters**
+         new_input: *dataframe*
+            The information of new patient
+         new_model: *dataframe*
+            The model we want to used for prediction 
+         model_choice: *dataframe*
+            The name of chosen model 
+
+    **Return**
+        None
+    '''
     new_pred_data = read_data(new_input)
     x_new = new_pred_data.drop(['HeartDisease'], axis=1)
     prob = new_model.predict_proba(x_new)
@@ -410,6 +578,20 @@ def show_gui(new_input,new_model,model_choice):
     
 
 def prob_draw(positive,negative,fptr):
+    '''
+    This function draw the pie chart of prediction results 
+
+    **Parameters**
+        positive: *int*
+            The predicted probability of heart failure
+        negative: *int*
+            The predicted probability of being healthy
+        fptr: *str*
+            The name of the model
+         
+    **Return**
+        The name of the pie chart figure.
+    '''
     labels=['Predicted to have heart failure','Predicted healthy']
     X=[positive,negative]  
     colors = ['firebrick', 'olive']
@@ -426,7 +608,7 @@ if __name__ == '__main__':
     # EDA(data)
     # cleaned_data = data_clean(data)
     # t_SNE(cleaned_data)
-    # logisticRegression(data)
+    logisticRegression(data)
     # RandomForest(data)
     # decision_tree(data)
     # gaussian_nb(data)
