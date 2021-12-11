@@ -36,8 +36,16 @@ ROC-AUC Score: 0.913
 
 
 ## How can this script help you predict the heart failure?
-***Use logistic regression as an example***
+***Here is the GUI interface example***
 
+1) Input a new patient information
+<img width="200" height="1200" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface1.png>
+
+2) Choose a prediction model 
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface2.png>
+
+3) Obtain a prediction result
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
 
 ## Contributors
 This project exists thanks to all the people who contribute.  
