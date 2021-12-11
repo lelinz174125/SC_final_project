@@ -25,6 +25,9 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
 from sklearn.model_selection import learning_curve
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist
+from pandas.plotting import parallel_coordinates
 
 
 def read_data(df):
@@ -115,9 +118,51 @@ def data_clean(dataset):
     new_df.info()
     return new_df
 
+def kmeans_find_cluster(dataset):
+    X=dataset.drop(columns='HeartDisease')#dataset except target
+    #X_numerics=dataset['HeartDisease']
+    n_clusters = [2,3,4,5,6,7,8] # number of clusters
+    meandistortions = []
 
-def kmeans():
-    pass
+    for n in n_clusters:
+        kmeans= KMeans(n_clusters=n, init='k-means++')
+        kmeans.fit(X)
+        #meandistortions.append(kmeans.inertia_)
+        #md=meandistortions.append(np.min(kmeans.inertia_) / X.shape[0])
+        meandistortions.append(sum(np.min(cdist(X,kmeans.cluster_centers_,'euclidean'),axis=1))/X.shape[0])
+        #cdist:Computes distance between each pair of the two collections of inputs.
+        #计算所有点与对应中心的距离的平方和的均值
+    fig, ax = plt.subplots(figsize=(12,5))
+    ax = sns.lineplot(n_clusters, meandistortions, marker='o', ax=ax)
+    ax.set_title("Elbow method")
+    ax.set_xlabel("number of clusters")
+    ax.set_ylabel("average dispersion")
+    ax.axvline(3, ls="--", c="red")
+    plt.grid()
+    plt.show()
+    #从3开始逐渐平缓，取cluster=3时为肘部
+    
+    
+def para_coor(dataset):
+    X=dataset.drop(columns='HeartDisease')
+    parallel_coordinates(X,'Sex')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
+    parallel_coordinates(X,'Age')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
+    parallel_coordinates(X,'RestingBP')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
+    parallel_coordinates(X,'Cholesterol')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
+    parallel_coordinates(X,'MaxHR')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
+    parallel_coordinates(X,'Oldpeak')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.show()
 
 
 def t_SNE(dataset):
@@ -615,6 +660,8 @@ if __name__ == '__main__':
     data = read_data(df)
     # EDA(data)
     cleaned_data = data_clean(data)
+    kmeans_find_cluster(clean_data)
+    para_coor(clean_data)
     # t_SNE(cleaned_data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
