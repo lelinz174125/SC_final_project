@@ -52,7 +52,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="500" height="300" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface2.png>
 
 3) Obtain a prediction result
-<img width="500" height="350" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
+<img width="500" height="330" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
 
 ## Contributors
 This project exists thanks to all the people who contribute.  
