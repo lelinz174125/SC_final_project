@@ -25,7 +25,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
 from sklearn.manifold import TSNE 
 from sklearn.model_selection import learning_curve
-from tkinter import *
 
 
 def read_data(df):
@@ -94,7 +93,7 @@ def EDA(dataset):
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
     plt.title('Spearman Correlation Heatmap')
     plt.show()
-    fig.savefig('feature_exploration.png')
+    fig.savefig('Figure/feature_exploration.png')
 
 
 def data_clean(dataset):
@@ -424,12 +423,12 @@ def prob_draw(positive,negative,fptr):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    # EDA(data)
+    EDA(data)
     # cleaned_data = data_clean(data)
     # t_SNE(cleaned_data)
-    logisticRegression(data)
-    RandomForest(data)
-    decision_tree(data)
-    gaussian_nb(data)
+    # logisticRegression(data)
+    # RandomForest(data)
+    # decision_tree(data)
+    # gaussian_nb(data)
     # new_patient_info = input_gui()
     # visual_gui(new_patient_info)
