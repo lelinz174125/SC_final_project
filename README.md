@@ -1,8 +1,17 @@
 ## Background
-The project plan to use an [open database](https://www.kaggle.com/fedesoriano/heart-failure-prediction) which contains 918 observations with 12 attributes to establish heart failure prediction models. Machine learning algorithms such as linear regression, logistic regression, random forests are possible choices for model fitting. Also, our program will allow heart failure prediction for new variants of patients.
+The project plan to use an [open database](https://www.kaggle.com/fedesoriano/heart-failure-prediction) which contains 918 observations with 12 attributes to establish heart failure prediction models. 
+Machine learning algorithms such as logistic regression, random forests are possible choices for model fitting. Also, our program will allow heart failure prediction for new variants of a patient.
 
-## How our model look like ?
+## Setup instructions
+1) git clone the repo
+2) do ```python pip install ``` to install the repo below
+   Data Address:  ```pandas```  ```numpy```  ```joblib``` ```sklearn```
+   Draw Figures:  ```Pillow``` ```matplotlib``` ```seaborn```
+   GUI Interface: ```tkinter``` ``` easygui``` 
 
+## How our data look like ?
+
+<img width="375" height="802.08" src=https://github.com/lelinz174125/SC_final_project/Figure/data.png>
 
 
 ***The following demonstration***
@@ -13,9 +22,10 @@ The project plan to use an [open database](https://www.kaggle.com/fedesoriano/he
 
 
 
-<!-- 
-<img width="375" height="802.08" src=https://github.com/lelinz174125/Lazor_Project/blob/main/IMG/yarn_5_origin.jpg>
 
+
+
+<!-- 
 After running, you can get the answer picture named as 'yarn_5_solved.png', which looks like   
 
 
@@ -26,7 +36,7 @@ And for 'mad_1', the answer looks like:
 
 
 <img width="375" height="375" src=https://github.com/lelinz174125/Lazor_Project/blob/main/IMG/mad_1_solved.png>   -->
-  
+   -->
 
 
 ## Contributors
