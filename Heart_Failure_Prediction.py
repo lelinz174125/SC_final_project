@@ -368,7 +368,12 @@ def decision_tree(dataset):
     x=dataset.drop(columns='HeartDisease')#dataset except target
     y=dataset['HeartDisease']
     x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
-    model=DecisionTreeClassifier(random_state=0)
+    #model=DecisionTreeClassifier(random_state=0)
+    #model=DecisionTreeClassifier(random_state=0)
+    model= DecisionTreeClassifier(criterion='gini',
+                                       max_depth=6,
+                                       max_leaf_nodes=14,
+                                       min_samples_leaf=1)
     model.fit(x_train, y_train)#training
     y_pred=model.predict(x_test)
     y_pred_proba=model.predict_proba(x_test)
