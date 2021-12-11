@@ -39,7 +39,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 
 <img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_Learning_curve.png>  
 
-<img width="200" height="200" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_confusion_matrix.png> 
+<img width="400" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_confusion_matrix.png> 
 
 
 ## How can this script help you predict the heart failure?
@@ -49,10 +49,10 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="200" height="600" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface1.png>
 
 2) Choose a prediction model 
-<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface2.png>
+<img width="500" height="300" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface2.png>
 
 3) Obtain a prediction result
-<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
+<img width="500" height="300" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
 
 ## Contributors
 This project exists thanks to all the people who contribute.  
