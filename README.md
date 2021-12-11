@@ -55,6 +55,8 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="500" height="325" src=https://github.com/lelinz174125/SC_final_project/blob/cc897b481b7660ae6cc51be571370927b215f0f2/Figure/gui_interface3.png>
 
 ## Contributors
-This project exists thanks to all the people who contribute.  
+This project exists thanks to all the people who contribute. 
+ 
 Lelin Zhong: lzhong6@jhu.edu, lzhong6
+
 Meng Qin: mqin7@jh.edu, mengqinqqq
