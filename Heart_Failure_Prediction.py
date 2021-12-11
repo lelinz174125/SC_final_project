@@ -180,7 +180,7 @@ def ROC_curve(y_test, y_pred_proba,modelname):
     **Parameters**
         y_test: *array*
             The real outcome
-        y_pred: *array*
+        y_pred_proba: *array*
             The probablity of the positive predicted outcomes
         modelname: *str*
             The name of model
@@ -209,7 +209,7 @@ def PR_curve(y_test, y_pred_proba,modelname):
     **Parameters**
         y_test: *array*
             The real outcome
-        y_pred: *array*
+        y_pred_proba: *array*
             The probablity of the positive predicted outcomes
         modelname: *str*
             The name of model
@@ -229,7 +229,7 @@ def PR_curve(y_test, y_pred_proba,modelname):
     fig.savefig("Figure/%s_PR_curve.png" % modelname)
 
 
-def Scores(y_test,y_pred,y_pred_proba):
+def Scores(y_test,y_pred,y_pred_proba,modelname):
     '''
     This function read the true outcome, the predicted outcome 
     and the probablity of the positive predicted outcomes. 
@@ -239,6 +239,8 @@ def Scores(y_test,y_pred,y_pred_proba):
         y_test: *array*
             The real outcome
         y_pred: *array*
+            The predicted outcomes
+        y_pred_proba: *array*
             The probablity of the positive predicted outcomes
         modelname: *str*
             The name of model
@@ -246,6 +248,7 @@ def Scores(y_test,y_pred,y_pred_proba):
     **Return**
         None
     '''
+    print('This is %s'% modelname)
     print('Precision: %.3f' % precision_score(y_test, y_pred))
     print('Recall: %.3f' % recall_score(y_test, y_pred))
     print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
@@ -317,7 +320,7 @@ def logisticRegression(dataset):
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
     PR_curve(y_test, y_pred_proba,'Logistic Regression')
     plot_learning_curve(dataset,lr,'Logistic Regression')
-    Scores(y_test,y_pred,y_pred_proba)
+    Scores(y_test,y_pred,y_pred_proba,'Logistic Regression')
     return y_test, y_pred, y_pred_proba
 
 
@@ -347,7 +350,7 @@ def RandomForest(dataset):
     ROC_curve(y_test, y_pred_proba,'RandomForest')
     PR_curve(y_test, y_pred_proba,'RandomForest')
     plot_learning_curve(dataset,rf,'RandomForest')
-    Scores(y_test,y_pred,y_pred_proba)
+    Scores(y_test,y_pred,y_pred_proba,'RandomForest')
     return y_test, y_pred, y_pred_proba
 
 
@@ -375,7 +378,7 @@ def decision_tree(dataset):
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
     PR_curve(y_test, y_pred_proba,'Decision Tree')
     plot_learning_curve(dataset,model,'Decision Tree')
-    Scores(y_test,y_pred,y_pred_proba)
+    Scores(y_test,y_pred,y_pred_proba,'Decision Tree')
     return y_test, y_pred, y_pred_proba
 
 
@@ -402,7 +405,7 @@ def gaussian_nb(dataset):
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     PR_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
     plot_learning_curve(dataset,GNB,'Gaussian Naive Bayes')
-    Scores(y_test,y_pred,y_pred_proba)
+    Scores(y_test,y_pred,y_pred_proba,'Gaussian Naive Bayes')
     return y_test, y_pred, y_pred_proba
 
   
@@ -533,7 +536,7 @@ def visual_gui(new_input):
     new_input.insert(new_input.shape[1],'HeartDisease','0')
     new_input.apply(pd.to_numeric, errors='ignore')
     new_input.info()
-    new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
+    # new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
     model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
     gui.msgbox('Click to see your predicted result')
     if model_choice == 'Logistic Regression':
@@ -565,7 +568,7 @@ def show_gui(new_input,new_model,model_choice):
     **Return**
         None
     '''
-    new_pred_data = read_data(new_input)
+    new_pred_data = data_clean(read_data(new_input))
     x_new = new_pred_data.drop(['HeartDisease'], axis=1)
     prob = new_model.predict_proba(x_new)
     name = prob_draw(prob[0][1],prob[0][0],model_choice)
@@ -606,11 +609,11 @@ if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
     # EDA(data)
-    # cleaned_data = data_clean(data)
+    cleaned_data = data_clean(data)
     # t_SNE(cleaned_data)
-    logisticRegression(data)
-    # RandomForest(data)
-    # decision_tree(data)
-    # gaussian_nb(data)
+    # logisticRegression(cleaned_data)
+    # RandomForest(cleaned_data)
+    # decision_tree(cleaned_data)
+    # gaussian_nb(cleaned_data)
     new_patient_info = input_gui()
     visual_gui(new_patient_info)
