@@ -45,9 +45,16 @@ Machine learning algorithms such as logistic regression, random forests are poss
 
 <img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/f56c61355279b259daaa18fd1e766cd7bdaf0d24/Figure/data.png>
 
-***The heatmap shows the correlation between features and outcome***
+## Feature Exploration
+
+***1. The heatmap shows the correlation between features and outcome***
 
 <img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/feature_exploration.png>
+
+***2. The k-means results shows the potential relationship between features***
+
+
+***3. The t-SNE results shows the potential relationship between features***
 
 
 ## How our Machine learning model look like ?
