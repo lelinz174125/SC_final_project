@@ -143,6 +143,7 @@ def kmeans_find_cluster(dataset):
     ax.axvline(3, ls="--", c="red")
     plt.grid()
     plt.show()
+    fig.savefig("Figure/%s_k_means.png" %'clustering compare')
     #从3开始逐渐平缓，取cluster=3时为肘部
     
     
