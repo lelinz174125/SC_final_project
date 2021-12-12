@@ -120,6 +120,7 @@ def data_clean(dataset):
     new_df.info()
     return new_df
 
+
 def kmeans_find_cluster(dataset):
     X=dataset.drop(columns='HeartDisease')#dataset except target
     #X_numerics=dataset['HeartDisease']
@@ -708,8 +709,8 @@ if __name__ == '__main__':
     data = read_data(df)
     # EDA(data)
     cleaned_data = data_clean(data)
-    kmeans_find_cluster(clean_data)
-    para_coor(clean_data)
+    kmeans_find_cluster(cleaned_data)
+    para_coor(cleaned_data)
     # t_SNE(cleaned_data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
