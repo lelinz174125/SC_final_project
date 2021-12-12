@@ -28,6 +28,8 @@ from sklearn.model_selection import learning_curve
 from sklearn.cluster import KMeans
 from scipy.spatial.distance import cdist
 from pandas.plotting import parallel_coordinates
+import unittest 
+from unittest import TestCase
 
 
 def read_data(df):
@@ -655,6 +657,52 @@ def prob_draw(positive,negative,fptr):
     return "Figure/%s_PieChart.png" % fptr
 
 
+class test(TestCase):
+    def read(self):
+        data= read_data('heart.csv')
+        result=data['Age'][0]
+        self.assertEqual(result,40)
+        
+    def EDA_test():
+        pass
+    def kmeans_find_cluster_test():
+        pass
+    def para_coor_test():
+        pass
+    
+    def t_SNE_test():
+        pass
+    
+    def plot_confusion_matrix_test():
+        pass
+    
+    def ROC_curve_test():
+        pass
+    
+    def Scores_test():
+        pass
+    def rocauc_score_test():
+        pass
+    
+    def PR_curve_test():
+        pass
+    
+    def logisticRegression_tset():
+        pass
+    
+    def RandomForest_test():
+        pass
+    
+    def decision_tree_test():
+        pass
+    
+    def gaussian_nb_test():
+        pass
+    
+    def plot_learning_curve_test():
+        pass
+
+
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
@@ -669,3 +717,4 @@ if __name__ == '__main__':
     # gaussian_nb(cleaned_data)
     new_patient_info = input_gui()
     visual_gui(new_patient_info)
+    unittest.main()
