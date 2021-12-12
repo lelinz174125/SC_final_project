@@ -147,23 +147,25 @@ def kmeans_find_cluster(dataset):
     
 def para_coor(dataset):
     X=dataset.drop(columns='HeartDisease')
+    plt.rcParams['figure.figsize'] = (30.0, 12.0)
+    
     parallel_coordinates(X,'Sex')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=5,fancybox=True,shadow=True)
     plt.show()
     parallel_coordinates(X,'Age')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
     parallel_coordinates(X,'RestingBP')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
     parallel_coordinates(X,'Cholesterol')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
     parallel_coordinates(X,'MaxHR')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
     parallel_coordinates(X,'Oldpeak')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=3,fancybox=True,shadow=True)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
 
 
