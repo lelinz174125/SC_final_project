@@ -28,8 +28,7 @@ from sklearn.model_selection import learning_curve
 from sklearn.cluster import KMeans
 from scipy.spatial.distance import cdist
 from pandas.plotting import parallel_coordinates
-import unittest 
-from unittest import TestCase
+
 
 
 def read_data(df):
@@ -498,7 +497,6 @@ def input_gui():
         pada['RestingECG'].replace([1,2,3],['Normal','ST','LVH'], inplace = True)
         pada['ExerciseAngina'].replace([1,2], ['Y','N'],inplace = True)
         pada['ST_Slope'].replace([1,2,3], ['Up','Flat','Down'],inplace = True)
-        print(pada)
         frame1.quit()
 
     toop = Tk()
@@ -573,8 +571,8 @@ def input_gui():
 
     frame1.pack(padx=20,pady=20)
     Button(toop,text="Submit",bg="blue",fg="white",command=clicked).pack(side=BOTTOM)
-    # Button(toop,text="Quit",bg="blue",fg="white",command=quit).pack(side=BOTTOM)
     mainloop()
+    pada.to_csv('new_patient.csv')
     return pada
 
 
@@ -661,64 +659,18 @@ def prob_draw(positive,negative,fptr):
     return "Figure/%s_PieChart.png" % fptr
 
 
-class test(TestCase):
-    def read(self):
-        data= read_data('heart.csv')
-        result=data['Age'][0]
-        self.assertEqual(result,40)
-        
-    def EDA_test():
-        pass
-    def kmeans_find_cluster_test():
-        pass
-    def para_coor_test():
-        pass
-    
-    def t_SNE_test():
-        pass
-    
-    def plot_confusion_matrix_test():
-        pass
-    
-    def ROC_curve_test():
-        pass
-    
-    def Scores_test():
-        pass
-    def rocauc_score_test():
-        pass
-    
-    def PR_curve_test():
-        pass
-    
-    def logisticRegression_tset():
-        pass
-    
-    def RandomForest_test():
-        pass
-    
-    def decision_tree_test():
-        pass
-    
-    def gaussian_nb_test():
-        pass
-    
-    def plot_learning_curve_test():
-        pass
-
-
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
     # EDA(data)
-    cleaned_data = data_clean(data)
-    kmeans_find_cluster(data)
-    para_coor(data)
+    # cleaned_data = data_clean(data)
+    # kmeans_find_cluster(data)
+    # para_coor(data)
     # t_SNE(cleaned_data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
-    # unittest.main()
+    new_patient_info = input_gui()
+    visual_gui(new_patient_info)
+
