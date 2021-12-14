@@ -10,7 +10,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 
    **Draw Figures:**  ```Pillow``` ```matplotlib``` ```seaborn```  
 
-   **GUI Interface:** ```tkinter``` ``` easygui```   
+   **GUI Interface:** ```tkinter``` 
 
 
 ## How our data look like ?

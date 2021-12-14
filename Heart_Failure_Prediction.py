@@ -481,6 +481,17 @@ def input_gui():
                         ,columns = ['Age','Sex','ChestPainType','RestingBP','Cholesterol','FastingBS',
                         'RestingECG','MaxHR','ExerciseAngina','Oldpeak','ST_Slope'])
     def clicked():
+        '''
+        After clicked submit point.
+        This function collect all the input value of a new patient into pada dataframe.
+
+        **Parameters**
+            None
+
+        **Return**
+            pada: *dataframe*
+                The information of new patient
+        '''
         pada['Age']=age.get()
         pada['Sex']=sex.get()
         pada['ChestPainType']=ChestPainType.get()
@@ -497,7 +508,6 @@ def input_gui():
         pada['RestingECG'].replace([1,2,3],['Normal','ST','LVH'], inplace = True)
         pada['ExerciseAngina'].replace([1,2], ['Y','N'],inplace = True)
         pada['ST_Slope'].replace([1,2,3], ['Up','Flat','Down'],inplace = True)
-        print(pada)
         frame1.quit()
 
     toop = Tk()
@@ -621,6 +631,7 @@ def visual_gui(new_input):
     Button(frame2,text="Predict",bg="white",fg="blue",command=clicked).grid(row=c+1, column=1, sticky=W)
     mainloop()
 
+
 def show_gui(new_input,new_model,model_choice):
     '''
     This function constructure a GUI interface and exhibit the predcition results
@@ -678,47 +689,7 @@ class test(TestCase):
         data= read_data('heart.csv')
         result=data['Age'][0]
         self.assertEqual(result,40)
-        
-    def EDA_test():
-        pass
-    def kmeans_find_cluster_test():
-        pass
-    def para_coor_test():
-        pass
     
-    def t_SNE_test():
-        pass
-    
-    def plot_confusion_matrix_test():
-        pass
-    
-    def ROC_curve_test():
-        pass
-    
-    def Scores_test():
-        pass
-    def rocauc_score_test():
-        pass
-    
-    def PR_curve_test():
-        pass
-    
-    def logisticRegression_tset():
-        pass
-    
-    def RandomForest_test():
-        pass
-    
-    def decision_tree_test():
-        pass
-    
-    def gaussian_nb_test():
-        pass
-    
-    def plot_learning_curve_test():
-        pass
-
-
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
@@ -731,6 +702,6 @@ if __name__ == '__main__':
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    new_patient_info = input_gui()
-    visual_gui(new_patient_info)
-    # unittest.main()
+    # new_patient_info = input_gui()
+    # visual_gui(new_patient_info)
+    unittest.main()
