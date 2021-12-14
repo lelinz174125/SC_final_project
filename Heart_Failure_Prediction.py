@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
-import easygui as gui
 import joblib
 from PIL import ImageTk
 from PIL import Image as PILImage
@@ -572,8 +571,7 @@ def input_gui():
         c += 1
 
     frame1.pack(padx=20,pady=20)
-    Button(toop,text="Submit",bg="blue",fg="white",command=clicked).pack(side=BOTTOM)
-    # Button(toop,text="Quit",bg="blue",fg="white",command=quit).pack(side=BOTTOM)
+    Button(toop,text="Submit",bg="white",fg="blue",command=clicked).pack(side=BOTTOM)
     mainloop()
     return pada
 
@@ -592,22 +590,36 @@ def visual_gui(new_input):
     new_input.insert(new_input.shape[1],'HeartDisease','0')
     new_input.apply(pd.to_numeric, errors='ignore')
     new_input.info()
-    # new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']] = new_input[['Age','RestingBP','Cholesterol','FastingBS','MaxHR','Oldpeak']].apply(pd.to_numeric)
-    model_choice = gui.choicebox(msg='Which models would you like to use ', title=' Heart Failure Prediction', choices=['Logistic Regression','Random Forest','Decision Tree','Gaussian Naive Bayes'])
-    gui.msgbox('Click to see your predicted result')
-    if model_choice == 'Logistic Regression':
-        new_model = joblib.load("Model/lr_model.joblib")
-        show_gui(new_input,new_model,model_choice)
-    elif model_choice =='Random Forest':
-        new_model = joblib.load("Model/rf_model.joblib")
-        show_gui(new_input,new_model,model_choice)
-    elif model_choice =='Decision Tree':
-        new_model = joblib.load("Model/dt_model.joblib")
-        show_gui(new_input,new_model,model_choice)
-    elif model_choice == 'Gaussian Naive Bayes':
-        new_model = joblib.load("Model/gnb_model.joblib")
-        show_gui(new_input,new_model,model_choice)
+    def clicked():
+        model_choice = choice.get()
+        if model_choice == 1 :
+            model = "Logistic Regression"
+            new_model = joblib.load("Model/lr_model.joblib")
+            show_gui(new_input,new_model,model)
+        elif model_choice ==2 :
+            model = "Random Forest"
+            new_model = joblib.load("Model/rf_model.joblib")
+            show_gui(new_input,new_model,model)
+        elif model_choice ==3 :
+            model = 'Decision Tree'
+            new_model = joblib.load("Model/dt_model.joblib")
+            show_gui(new_input,new_model,model)
+        elif model_choice == 4 :
+            model = 'Gaussian Naive Bayes'
+            new_model = joblib.load("Model/gnb_model.joblib")
+            show_gui(new_input,new_model,model)
+        frame2.quit()
 
+    frame2 = Toplevel()
+    Label(frame2,text="Which models would you like to use for heart failure prediction?").grid(row=0,column=0,sticky=W)
+    list = [("Logistic Regression", 1),("Random Forest", 2),('Decision Tree',3),('Gaussian Naive Bayes',4)]
+    choice = IntVar()
+    c = 1
+    for num, check in list:
+        Radiobutton(frame2, text=num, variable=choice,value=check).grid(row=c, column=0, sticky=W)
+        c += 1
+    Button(frame2,text="Predict",bg="white",fg="blue",command=clicked).grid(row=c+1, column=1, sticky=W)
+    mainloop()
 
 def show_gui(new_input,new_model,model_choice):
     '''
@@ -628,11 +640,11 @@ def show_gui(new_input,new_model,model_choice):
     x_new = new_pred_data.drop(['HeartDisease'], axis=1)
     prob = new_model.predict_proba(x_new)
     name = prob_draw(prob[0][1],prob[0][0],model_choice)
-    frame2 = Toplevel()
+    frame3 = Toplevel()
     im=PILImage.open(name)
     img=ImageTk.PhotoImage(im)
-    Label(frame2,image=img).pack()
-    Button(frame2,text="Quit",command=quit).pack(side=BOTTOM)
+    Label(frame3,image=img).pack()
+    Button(frame3,text="Quit",command=quit).pack(side=BOTTOM)
     mainloop()
     
 
@@ -651,7 +663,7 @@ def prob_draw(positive,negative,fptr):
     **Return**
         The name of the pie chart figure.
     '''
-    labels=['Predicted to have heart failure','Predicted healthy']
+    labels=['Predicted to have heart failure(Red color)','Predicted healthy(Green color)']
     X=[positive,negative]  
     colors = ['firebrick', 'olive']
     fig = plt.figure(figsize=(8, 4))
@@ -719,6 +731,6 @@ if __name__ == '__main__':
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
-    unittest.main()
+    new_patient_info = input_gui()
+    visual_gui(new_patient_info)
+    # unittest.main()
