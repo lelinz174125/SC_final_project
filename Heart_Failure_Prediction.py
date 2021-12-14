@@ -184,14 +184,15 @@ def t_SNE(dataset):
     '''
     y_true = dataset['HeartDisease']
     x_data = dataset.drop(columns='HeartDisease')
-    tsne = TSNE(verbose = 1, n_components=2, init='random', perplexity = 50 , n_iter=1000, learning_rate=10)
+    tsne = TSNE(verbose = 0, n_components=2, init='random', perplexity = 50 , n_iter=1000, learning_rate=10)
     X_tsne = tsne.fit_transform(x_data) 
     X_tsne_data = np.vstack((X_tsne.T, y_true)).T 
     df_tsne = pd.DataFrame(X_tsne_data, columns=['Dim1', 'Dim2','class']) 
     df_tsne.head()
-    plt.figure(figsize=(8, 8)) 
+    fig = plt.figure(figsize=(8, 8)) 
     sns.scatterplot(data=df_tsne, hue='class', x='Dim1', y='Dim2',s=4) 
     plt.show()
+    fig.savefig('Figure/t-SNE_analysis.png')
 
 
 def plot_confusion_matrix(y_test, y_pred,modelname):
@@ -734,10 +735,10 @@ if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
     # EDA(data)
-    # cleaned_data = data_clean(data)
-    # kmeans_find_cluster(data)
-    # para_coor(data)
-    # t_SNE(cleaned_data)
+    cleaned_data = data_clean(data)
+    kmeans_find_cluster(data)
+    para_coor(data)
+    t_SNE(cleaned_data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
