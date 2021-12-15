@@ -509,6 +509,7 @@ def input_gui():
         pada['RestingECG'].replace([1,2,3],['Normal','ST','LVH'], inplace = True)
         pada['ExerciseAngina'].replace([1,2], ['Y','N'],inplace = True)
         pada['ST_Slope'].replace([1,2,3], ['Up','Flat','Down'],inplace = True)
+        pada.to_csv('new_patient_data.csv')
         frame1.quit()
 
     toop = Tk()
