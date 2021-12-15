@@ -82,7 +82,7 @@ def read_data(df):
     return(new_df)
 
 
-def EDA(dataset):
+def corr(dataset):
     '''
     This function read a data set and figure out the potential relationship in data set 
 
@@ -734,7 +734,7 @@ class test(TestCase):
 if __name__ == '__main__':
     df = pd.read_csv('heart.csv')
     data = read_data(df)
-    # EDA(data)
+    # corr(data)
     # kmeans_find_cluster(data)
     # para_coor(data)
     # t_SNE(data)
