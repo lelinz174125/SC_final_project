@@ -147,6 +147,16 @@ def kmeans_find_cluster(dataset):
     
     
 def para_coor(dataset):
+    '''
+    This function plot the parallel coordinates for each parameters.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     X=dataset.drop(columns='HeartDisease')
     plt.rcParams['figure.figsize'] = (30.0, 12.0)
     
@@ -168,6 +178,7 @@ def para_coor(dataset):
     parallel_coordinates(X,'Oldpeak')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.show()
+    #plots of remaining parameters are not shown in the coding above since their plots are the same as others
 
 
 def t_SNE(dataset):
