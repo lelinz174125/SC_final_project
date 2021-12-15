@@ -691,7 +691,7 @@ class test(TestCase):
         result=data['Age'][0]
         self.assertEqual(result,40)
         
-    def EDA_test():
+    def corr_test():
         pass
     def kmeans_find_cluster_test():
         pass
