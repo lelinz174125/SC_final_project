@@ -744,6 +744,6 @@ if __name__ == '__main__':
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
+    new_patient_info = input_gui()
+    visual_gui(new_patient_info)
     unittest.main()
