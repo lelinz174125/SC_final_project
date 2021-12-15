@@ -121,6 +121,16 @@ def data_clean(dataset):
 
 
 def kmeans_find_cluster(dataset):
+    '''
+    This function find the optimal number of cluster.
+
+    **Parameters**
+        dataset: *dataframe*
+            The addressed dataframe
+
+    **Return**
+        None
+    '''
     X=dataset.drop(columns='HeartDisease')#dataset except target
     #X_numerics=dataset['HeartDisease']
     n_clusters = [2,3,4,5,6,7,8] # number of clusters
@@ -143,7 +153,6 @@ def kmeans_find_cluster(dataset):
     plt.grid()
     plt.show()
     fig.savefig("Figure/%s_k_means.png" %'clustering compare')
-    #从3开始逐渐平缓，取cluster=3时为肘部
     
     
 def para_coor(dataset):
