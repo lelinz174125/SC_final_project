@@ -190,8 +190,8 @@ def t_SNE(dataset):
     df_tsne = pd.DataFrame(X_tsne_data, columns=['Dim1', 'Dim2','class']) 
     df_tsne.head()
     fig = plt.figure(figsize=(8, 8)) 
+    plt.title('The t-SNE analysis')
     sns.scatterplot(data=df_tsne, hue='class', x='Dim1', y='Dim2',s=4) 
-    plt.show()
     fig.savefig('Figure/t-SNE_analysis.png')
 
 
@@ -736,9 +736,9 @@ if __name__ == '__main__':
     data = read_data(df)
     # EDA(data)
     cleaned_data = data_clean(data)
-    kmeans_find_cluster(data)
-    para_coor(data)
-    t_SNE(cleaned_data)
+    # kmeans_find_cluster(data)
+    # para_coor(data)
+    t_SNE(data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
