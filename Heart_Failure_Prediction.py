@@ -132,17 +132,18 @@ def kmeans_find_cluster(dataset):
         None
     '''
     X=dataset.drop(columns='HeartDisease')
-    #dataset except target
+    #Dataset except target
     n_clusters = [2,3,4,5,6,7,8] 
-    # number of clusters
+    #Number of clusters
     meandistortions = []
     for n in n_clusters:
         kmeans= KMeans(n_clusters=n, init='k-means++')
         kmeans.fit(X)
         meandistortions.append(sum(np.min(cdist(X,kmeans.cluster_centers_,'euclidean'),axis=1))/X.shape[0])
-        #calculate the minimum distance between each cluster centers
+    #Calculate the Euclidean distance between each cluster centers
     fig, ax = plt.subplots(figsize=(12,5))
     ax = sns.lineplot(n_clusters, meandistortions, marker='o', ax=ax)
+    #Plot elbow method with the number of clusters and Euclidean distance
     ax.set_title("Elbow method")
     ax.set_xlabel("number of clusters")
     ax.set_ylabel("average dispersion")
@@ -164,8 +165,8 @@ def para_coor(dataset):
         None
     '''
     X=dataset.drop(columns='HeartDisease')
+    #Dataset except target
     plt.rcParams['figure.figsize'] = (30.0, 12.0)
-    
     parallel_coordinates(X,'Sex')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=5,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Sex)', fontsize=12)
@@ -340,7 +341,9 @@ def Scores(y_test,y_pred,y_pred_proba,modelname):
     print('Recall: %.3f' % recall_score(y_test, y_pred))
     print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
     print('F1 Score: %.3f' % f1_score(y_test, y_pred))
+    #Calculate the 
     print('ROC-AUC Score: %.3f' % roc_auc_score(y_test, y_pred_proba[:,1]))
+    #Calculate the ROC-AUC score by 
     return None
     
 
@@ -359,13 +362,18 @@ def plot_learning_curve(dataset, estimator,modelname):
     **Return**
         None
     '''
-    x=dataset.drop(columns='HeartDisease')#dataset except target
-    y=dataset['HeartDisease']#target
+    x=dataset.drop(columns='HeartDisease')
+    #Dataset except target
+    y=dataset['HeartDisease']
+    #Dataset of target
     train_sizes, train_scores, test_scores = learning_curve(estimator, x, y)
+    #Number of samples in training set, score if training set, score of test set
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
+    #Mean of test set scores
     test_scores_std = np.std(test_scores, axis=1)
+    #Standard deviation of test scores
     fig = plt.figure()
     plt.xlabel("Training examples")
     plt.ylabel("Score")
@@ -373,10 +381,13 @@ def plot_learning_curve(dataset, estimator,modelname):
     plt.grid()
     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, 
                          alpha=0.1, color="b") 
+    #Plot the learning curve with upper and lower limits of training score
     plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, 
                          alpha=0.1, color="r")
+    #Plot the learning curve with upper and lower limits of test score
     plt.plot(train_sizes, train_scores_mean, 'o-', color="r",label="Training score")
     plt.plot(train_sizes, test_scores_mean, 'o-', color="g",label="Cross-validation score")
+    #Plot learning curve
     plt.legend(loc="best")
     fig.savefig("Figure/%s_Learning_curve.png" % modelname)
 
