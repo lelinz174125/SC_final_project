@@ -66,6 +66,7 @@ def read_data(df):
     new_df['ST_Slope_Flat']=df['ST_Slope']
     new_df['ST_Slope_Down']=df['ST_Slope']
     new_df['HeartDisease']=df['HeartDisease']
+    # address the data, transfer all the characters into number 
     new_df['Sex'].replace(['M','F'],[1.0, 0.0], inplace = True)
     new_df['ChestPainType_TA'].replace(['TA','ATA','ASY','NAP'],[1.0, 0.0, 0.0, 0.0], inplace = True)
     new_df['ChestPainType_ATA'].replace(['TA','ATA','ASY','NAP'],[0.0, 1.0, 0.0, 0.0], inplace = True)
@@ -78,6 +79,7 @@ def read_data(df):
     new_df['ST_Slope_Up'].replace(['Up','Flat','Down'],[1.0, 0.0, 0.0], inplace = True)
     new_df['ST_Slope_Flat'].replace(['Up','Flat','Down'],[0.0, 1.0, 0.0], inplace = True)
     new_df['ST_Slope_Down'].replace(['Up','Flat','Down'],[0.0, 0.0, 1.0], inplace = True)
+    # Store the new data set into a new file
     new_df.to_csv('heart_data_addressed.csv')
     return(new_df)
 
@@ -93,6 +95,7 @@ def corr(dataset):
     **Return**
         None
     '''
+    # find the corresponding between features and outcome
     corr = dataset.corr(method = 'spearman')
     fig = plt.figure(figsize=(20,6))
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
@@ -113,6 +116,7 @@ def data_clean(dataset):
         new_df: *dataframe*
             A new data frame that exclude the less relative columns
     '''
+    # drop the unrelative data set 
     new_df = dataset.drop(['Age','Sex','ChestPainType_TA','ChestPainType_NAP','RestingBP','Cholesterol','FastingBS',
                             'RestingECG_Normal','RestingECG_ST','RestingECG_LVH','ST_Slope_Down'], axis=1)
     new_df.head(10)
@@ -218,8 +222,10 @@ def t_SNE(dataset):
     **Return**
         None
     '''
+    # drop the outcome
     y_true = dataset['HeartDisease']
     x_data = dataset.drop(columns='HeartDisease')
+    # use t-SNE to reduce the dimentionality of dataset
     tsne = TSNE(verbose = 0, n_components=2, init='random', perplexity = 50 , n_iter=1000, learning_rate=10)
     X_tsne = tsne.fit_transform(x_data) 
     X_tsne_data = np.vstack((X_tsne.T, y_true)).T 
@@ -247,8 +253,9 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
     **Return**
         None
     '''
+    # calculate the confusion matrix based on different model 
     conf_matrix = confusion_matrix(y_true=y_test, y_pred=y_pred)
-    
+    # plot the confusion matrix
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.matshow(conf_matrix, cmap='GnBu', alpha=0.75)
     for i in range(conf_matrix.shape[0]):
@@ -276,7 +283,9 @@ def ROC_curve(y_test, y_pred_proba,modelname):
     **Return**
         None
     '''
+    # calculate the false positive rate and true positive rate of model
     fpr, tpr, _ = roc_curve(y_test, y_pred_proba[:,1])
+    # calculate the auc value of model
     roc_auc = auc(fpr, tpr)
     fig = plt.figure()
     plt.plot(fpr, tpr, 'b', label = '%s (AUC = %0.2f)' % (modelname,roc_auc))
