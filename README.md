@@ -52,8 +52,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/feature_exploration.png>
 
 ***2. The k-means results shows the potential relationship between features***
-
-
+<img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/clustering%20compare_k_means.png>
 ***3. The t-SNE results shows the potential relationship between features***
 
 
