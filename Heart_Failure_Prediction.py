@@ -769,33 +769,71 @@ def prob_draw(positive,negative,fptr):
 
     
 class test(unittest.TestCase):
-    
+    '''
+    This class can test if the read_data, data_clean and input_gui function can oprate correctly.
+    '''
     
     def setUp(self):
-        #df = pd.read_csv('heart.csv')
-        #data=read_data(df)
-        #cl=data_clean(data)
+        '''
+        This function will set up all parameters.
+
+        Returns
+        -------
+        None.
+
+        '''
         self.data=read_data(df)
         self.cleaned_data=data_clean(data)
         self.in_gui=input_gui()
         
 
     def test_read(self):
-        #df = pd.read_csv('heart.csv')
+        '''
+        This function tests if the read_data function can works correctly.
+
+        Returns
+        -------
+        None.
+
+        '''        
         result1=self.data['Age'][0]
         result2=self.data['Sex'][0]
         num_col1=len(self.data.columns)
         self.assertEqual(result1,40)
         self.assertEqual(result2,1.0)
         self.assertEqual(num_col1,19)
+        #if the first value of age is '40' 
+        #the first value of sex is '0' 
+        #the number of columns in data is '10'
+        #the read_data function works correctly
         
     def test_dataclean(self):
+        '''
+        This function tests data_clean function.
+
+        Returns
+        -------
+        None.
+
+        '''
         num_col2=len(self.cleaned_data.columns)
         self.assertEqual(num_col2,8)
+        #if the number of columns in cleaned_data is '8'
+        #the data_clean function works correctly
         
     def test_inputgui(self):
+        '''
+        This function tests if the input_gui function works correctly.
+
+        Returns
+        -------
+        None.
+
+        '''
         num_col3=len(self.in_gui.columns)
         self.assertEqual(num_col3,11)
+        #if the number of columns of in_gui (dataset patient input ) is '11'
+        #the input_gui function works correctly
     
 
 if __name__ == '__main__':
