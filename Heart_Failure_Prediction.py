@@ -790,7 +790,7 @@ class test(unittest.TestCase):
         df = pd.read_csv('heart.csv')
         self.data=read_data(df)
         self.cleaned_data=data_clean(self.data)
-        self.in_gui=input_gui()
+        
         
 
     def test_read(self):
@@ -836,6 +836,7 @@ class test(unittest.TestCase):
         None.
 
         '''
+        self.in_gui=input_gui()
         num_col3=len(self.in_gui.columns)
         self.assertEqual(num_col3,11)
         #if the number of columns of in_gui (dataset patient input ) is '11'
