@@ -675,7 +675,7 @@ def input_gui():
     return pada
 
 
-def visual_gui(new_input):
+def choosemodel_gui(new_input):
     '''
     This function constructure a GUI interface and allow people to choose a ML model
 
@@ -690,23 +690,6 @@ def visual_gui(new_input):
     new_input.apply(pd.to_numeric, errors='ignore')
     new_input.info()
     def clicked():
-        model_choice = choice.get()
-        if model_choice == 1 :
-            model = "Logistic Regression"
-            new_model = joblib.load("Model/lr_model.joblib")
-            show_gui(new_input,new_model,model)
-        elif model_choice ==2 :
-            model = "Random Forest"
-            new_model = joblib.load("Model/rf_model.joblib")
-            show_gui(new_input,new_model,model)
-        elif model_choice ==3 :
-            model = 'Decision Tree'
-            new_model = joblib.load("Model/dt_model.joblib")
-            show_gui(new_input,new_model,model)
-        elif model_choice == 4 :
-            model = 'Gaussian Naive Bayes'
-            new_model = joblib.load("Model/gnb_model.joblib")
-            show_gui(new_input,new_model,model)
         frame2.quit()
 
     frame2 = Toplevel()
@@ -719,6 +702,24 @@ def visual_gui(new_input):
         c += 1
     Button(frame2,text="Predict",bg="white",fg="blue",command=clicked).grid(row=c+1, column=1, sticky=W)
     mainloop()
+    model_choice = choice.get()
+    if model_choice == 1 :
+        model = "Logistic Regression"
+        new_model = joblib.load("Model/lr_model.joblib")
+        show_gui(new_input,new_model,model)
+    elif model_choice ==2 :
+        model = "Random Forest"
+        new_model = joblib.load("Model/rf_model.joblib")
+        show_gui(new_input,new_model,model)
+    elif model_choice ==3 :
+        model = 'Decision Tree'
+        new_model = joblib.load("Model/dt_model.joblib")
+        show_gui(new_input,new_model,model)
+    elif model_choice == 4 :
+        model = 'Gaussian Naive Bayes'
+        new_model = joblib.load("Model/gnb_model.joblib")
+        show_gui(new_input,new_model,model)
+    return model
 
 
 def show_gui(new_input,new_model,model_choice):
@@ -855,6 +856,6 @@ if __name__ == '__main__':
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
-    unittest.main()
+    new_patient_info = input_gui()
+    choosemodel_gui(new_patient_info)
+    # unittest.main()
