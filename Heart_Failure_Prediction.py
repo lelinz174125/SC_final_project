@@ -715,15 +715,35 @@ def prob_draw(positive,negative,fptr):
     fig.savefig("Figure/%s_PieChart.png" % fptr)
     return "Figure/%s_PieChart.png" % fptr
 
-
-class test(TestCase):
-    def read(self):
-        data= read_data('heart.csv')
-        result=data['Age'][0]
-        self.assertEqual(result,40)
+    
+class test(unittest.TestCase):
+    
+    
+    def setUp(self):
+        #df = pd.read_csv('heart.csv')
+        #data=read_data(df)
+        #cl=data_clean(data)
+        self.data=read_data(df)
+        self.cleaned_data=data_clean(data)
+        self.in_gui=input_gui()
         
-    def corr_test():
-        pass
+
+    def test_read(self):
+        #df = pd.read_csv('heart.csv')
+        result1=self.data['Age'][0]
+        result2=self.data['Sex'][0]
+        num_col1=len(self.data.columns)
+        self.assertEqual(result1,40)
+        self.assertEqual(result2,1.0)
+        self.assertEqual(num_col1,19)
+        
+    def test_dataclean(self):
+        num_col2=len(self.cleaned_data.columns)
+        self.assertEqual(num_col2,8)
+        
+    def test_inputgui(self):
+        num_col3=len(self.in_gui.columns)
+        self.assertEqual(num_col3,11)
     
 
 if __name__ == '__main__':
