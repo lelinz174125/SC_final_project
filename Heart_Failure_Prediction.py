@@ -321,7 +321,7 @@ def PR_curve(y_test, y_pred_proba,modelname):
     #calculate precision and recall
     no_skill = len(y_test[y_test==1]) / len(y_test)
     fig = plt.figure()
-    plt.plot(recall, precision, marker='.', label='%s ' % modelname)]
+    plt.plot(recall, precision, marker='.', label='%s ' % modelname)
     #plot PR curve
     plt.plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill Classifier')
     #plot 'No Skill Classifier' curve
