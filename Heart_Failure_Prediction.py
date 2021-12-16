@@ -28,7 +28,6 @@ from sklearn.cluster import KMeans
 from scipy.spatial.distance import cdist
 from pandas.plotting import parallel_coordinates
 import unittest 
-from unittest import TestCase
 
 
 def read_data(df):
@@ -100,7 +99,6 @@ def corr(dataset):
     fig = plt.figure(figsize=(20,6))
     sns.heatmap(corr, annot=True, fmt='.2f', cmap='Blues')
     plt.title('Spearman Correlation Heatmap')
-    plt.show()
     fig.savefig('Figure/feature_exploration.png')
 
 
@@ -153,7 +151,6 @@ def kmeans_find_cluster(dataset):
     ax.set_ylabel("average dispersion")
     ax.axvline(3, ls="--", c="red")
     plt.grid()
-    plt.show()
     fig.savefig("Figure/%s_k_means.png" %'clustering compare')
     
     
@@ -175,37 +172,31 @@ def para_coor(dataset):
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=5,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Sex)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Sex.png')
-    plt.show()
     #show parallel coordinates between sex and remaining parameters.
     parallel_coordinates(X,'Age')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Age)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Age.png')
-    plt.show()
     #show parallel coordinates between age and remaining parameters.
     parallel_coordinates(X,'RestingBP')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (RestingBP)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_RestingBP.png')
-    plt.show()
     #show parallel coordinates between RestingBP and remaining parameters.
     parallel_coordinates(X,'Cholesterol')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Cholesterol)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Cholesterol.png')
-    plt.show()
     #show parallel coordinates between Cholesterol and remaining parameters.
     parallel_coordinates(X,'MaxHR')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (MaxHR)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_MaxHR.png')    
-    plt.show()
     #show parallel coordinates between MaxHR and remaining parameters.
     parallel_coordinates(X,'Oldpeak')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Oldpeak)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Oldpeak.png')    
-    plt.show()
     #show parallel coordinates between Oldpeak and remaining parameters.
     #plots of remaining parameters are not shown in the coding above since their plots are the same as others
 
@@ -351,6 +342,7 @@ def Scores(y_test,y_pred,y_pred_proba,modelname):
     **Return**
         None
     '''
+    print('----------------------------')
     print('This is %s'% modelname)
     print('Precision: %.3f' % precision_score(y_test, y_pred))
     print('Recall: %.3f' % recall_score(y_test, y_pred))
@@ -675,7 +667,7 @@ def input_gui():
     return pada
 
 
-def visual_gui(new_input):
+def choosemodel_gui():
     '''
     This function constructure a GUI interface and allow people to choose a ML model
 
@@ -686,29 +678,40 @@ def visual_gui(new_input):
     **Return**
         None
     '''
-    new_input.insert(new_input.shape[1],'HeartDisease','0')
-    new_input.apply(pd.to_numeric, errors='ignore')
-    new_input.info()
     def clicked():
+        '''
+        After clicked submit point.
+        This function will collect the model the tester choose and call show_gui to give back
+        the prediction result.
+
+        **Parameters**
+            None
+
+        **Return**
+            None: 
+        '''
+        # Obtain the chosen model
         model_choice = choice.get()
         if model_choice == 1 :
             model = "Logistic Regression"
+            # Load the stored model
             new_model = joblib.load("Model/lr_model.joblib")
-            show_gui(new_input,new_model,model)
+            # call show_gui function to make a prediction and show the prediction result
+            show_gui(new_model,model)
         elif model_choice ==2 :
             model = "Random Forest"
             new_model = joblib.load("Model/rf_model.joblib")
-            show_gui(new_input,new_model,model)
+            show_gui(new_model,model)
         elif model_choice ==3 :
             model = 'Decision Tree'
             new_model = joblib.load("Model/dt_model.joblib")
-            show_gui(new_input,new_model,model)
+            show_gui(new_model,model)
         elif model_choice == 4 :
             model = 'Gaussian Naive Bayes'
             new_model = joblib.load("Model/gnb_model.joblib")
-            show_gui(new_input,new_model,model)
+            show_gui(new_model,model)
         frame2.quit()
-
+    # construct a gui interface and let the tester choose a model
     frame2 = Toplevel()
     Label(frame2,text="Which models would you like to use for heart failure prediction?").grid(row=0,column=0,sticky=W)
     list = [("Logistic Regression", 1),("Random Forest", 2),('Decision Tree',3),('Gaussian Naive Bayes',4)]
@@ -721,7 +724,7 @@ def visual_gui(new_input):
     mainloop()
 
 
-def show_gui(new_input,new_model,model_choice):
+def show_gui(new_model,model_choice):
     '''
     This function constructure a GUI interface and exhibit the predcition results
 
@@ -736,10 +739,17 @@ def show_gui(new_input,new_model,model_choice):
     **Return**
         None
     '''
+    # address the newly input data of one patient
+    new_input = pd.read_csv('new_patient_data.csv')
+    new_input.insert(new_input.shape[1],'HeartDisease','0')
+    new_input.apply(pd.to_numeric, errors='ignore')
+    new_input.info()
     new_pred_data = data_clean(read_data(new_input))
     x_new = new_pred_data.drop(['HeartDisease'], axis=1)
+    # predict the heart failure prossibility of patient based on a chosen model
     prob = new_model.predict_proba(x_new)
     name = prob_draw(prob[0][1],prob[0][0],model_choice)
+    # show the predicted result
     frame3 = Toplevel()
     im=PILImage.open(name)
     img=ImageTk.PhotoImage(im)
@@ -791,8 +801,6 @@ class test(unittest.TestCase):
         self.data=read_data(df)
         self.cleaned_data=data_clean(self.data)
         
-        
-
     def test_read(self):
         '''
         This function tests if the read_data function can works correctly.
@@ -841,16 +849,12 @@ class test(unittest.TestCase):
         self.assertEqual(num_col3,11)
         #if the number of columns of in_gui (dataset patient input ) is '11'
         #the input_gui function works correctly
-        
-    def test_choosemodel(self):
-        global model
-        new_patient_info = input_gui()
-        self.choosem=choosemodel_gui(new_patient_info)
-        a=["Logistic Regression", "Random Forest", 'Decision Tree', 'Gaussian Naive Bayes']
-        self.assertIn(self.choosem,a)
-    
+
 
 if __name__ == '__main__':
+
+    # ## Read & Address the data and do feature exploration ##
+    # #######################################################
     # df = pd.read_csv('heart.csv')
     # data = read_data(df)
     # corr(data)
@@ -858,10 +862,20 @@ if __name__ == '__main__':
     # para_coor(data)
     # t_SNE(data)
     # cleaned_data = data_clean(data)
+
+    # ## Use machine learning model to make classification ##
+    # #######################################################
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    # new_patient_info = input_gui()
-    # visual_gui(new_patient_info)
+
+    ## The GUI interface permit for inputing information of a new pateint to obatin a prediction ##
+    ## The following function should be runned individually
+    ########################################################
+    input_gui()
+    choosemodel_gui()
+
+    # The unittest part for separate function ##
+    ########################################################
     unittest.main()
