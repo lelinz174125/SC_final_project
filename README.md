@@ -59,7 +59,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/Parellel_Coordination_Age.png>
 
 ***4. The t-SNE results shows the potential relationship between features***
-<img width="900" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/t-SNE_analysis.png>
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/t-SNE_analysis.png>
 
 ## How our Machine learning model look like ?
 ***Use logistic regression as an example***
@@ -80,7 +80,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 
 <img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_Learning_curve.png>  
 
-<img width="400" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_confusion_matrix.png> 
+<img width="500" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/41ea099e8fb8e47faa847a168ad991b69596d4ce/Figure/Logistic%20Regression_confusion_matrix.png> 
 
 
 ## How can this script help you predict the heart failure?
