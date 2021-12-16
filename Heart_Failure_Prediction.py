@@ -282,6 +282,7 @@ def ROC_curve(y_test, y_pred_proba,modelname):
     plt.plot(fpr, tpr, 'b', label = '%s (AUC = %0.2f)' % (modelname,roc_auc))
     plt.plot([0, 1], [0, 1],'r--', label='No Skill Classifier')
     plt.plot([0, 0, 1], [0, 1, 1], linestyle=':', color='black', label='perfect performance')
+    #P
     plt.legend(loc = 'lower right')
     plt.title('ROC Curve: %s '% modelname)
     plt.ylabel('True Positive Rate (sensitivity)')
@@ -341,9 +342,9 @@ def Scores(y_test,y_pred,y_pred_proba,modelname):
     print('Recall: %.3f' % recall_score(y_test, y_pred))
     print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
     print('F1 Score: %.3f' % f1_score(y_test, y_pred))
-    #Calculate the 
+    #Calculate the scores by test set and probability estimates provided by the predict_pred
     print('ROC-AUC Score: %.3f' % roc_auc_score(y_test, y_pred_proba[:,1]))
-    #Calculate the ROC-AUC score by 
+    #Calculate the ROC-AUC score by test set result probability estimates provided by the predict_proba
     return None
     
 
@@ -408,7 +409,7 @@ def logisticRegression(dataset):
     Y = dataset['HeartDisease']
     #Dataset of target
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
-    #Dplit data to training set and test set
+    #Split data to training set and test set
     transfer = StandardScaler()
     x_train = transfer.fit_transform(x_train)
     x_test = transfer.fit_transform(x_test)
