@@ -842,6 +842,13 @@ class test(unittest.TestCase):
         self.assertEqual(num_col3,11)
         #if the number of columns of in_gui (dataset patient input ) is '11'
         #the input_gui function works correctly
+        
+    def test_choosemodel(self):
+        global model
+        new_patient_info = input_gui()
+        self.choosem=choosemodel_gui(new_patient_info)
+        a=["Logistic Regression", "Random Forest", 'Decision Tree', 'Gaussian Naive Bayes']
+        self.assertIn(self.choosem,a)
     
 
 if __name__ == '__main__':
