@@ -787,8 +787,9 @@ class test(unittest.TestCase):
         None.
 
         '''
+        df = pd.read_csv('heart.csv')
         self.data=read_data(df)
-        self.cleaned_data=data_clean(data)
+        self.cleaned_data=data_clean(self.data)
         self.in_gui=input_gui()
         
 
@@ -842,17 +843,17 @@ class test(unittest.TestCase):
     
 
 if __name__ == '__main__':
-    df = pd.read_csv('heart.csv')
-    data = read_data(df)
+    # df = pd.read_csv('heart.csv')
+    # data = read_data(df)
     # corr(data)
     # kmeans_find_cluster(data)
     # para_coor(data)
     # t_SNE(data)
-    cleaned_data = data_clean(data)
+    # cleaned_data = data_clean(data)
     # logisticRegression(cleaned_data)
     # RandomForest(cleaned_data)
     # decision_tree(cleaned_data)
     # gaussian_nb(cleaned_data)
-    new_patient_info = input_gui()
-    visual_gui(new_patient_info)
+    # new_patient_info = input_gui()
+    # visual_gui(new_patient_info)
     unittest.main()
