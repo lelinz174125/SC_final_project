@@ -606,7 +606,7 @@ def input_gui():
 
     age = StringVar()
     Label(frame1,text="Age").grid(row=0,column=0,sticky=W)
-    Entry(frame1,text="请输入内容",textvariable=age).grid(row=1,column=0)
+    Entry(frame1,text="Input",textvariable=age).grid(row=1,column=0)
   
 
     Label(frame1,text="Sex:").grid(row=2,column=0,sticky=W)
