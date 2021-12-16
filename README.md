@@ -59,6 +59,7 @@ Machine learning algorithms such as logistic regression, random forests are poss
 <img width="1200" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/Parellel_Coordination_Age.png>
 
 ***4. The t-SNE results shows the potential relationship between features***
+
 <img width="400" height="400" src=https://github.com/lelinz174125/SC_final_project/blob/main/Figure/t-SNE_analysis.png>
 
 ## How our Machine learning model look like ?
