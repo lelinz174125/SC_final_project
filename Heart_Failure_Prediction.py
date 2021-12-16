@@ -131,19 +131,16 @@ def kmeans_find_cluster(dataset):
     **Return**
         None
     '''
-    X=dataset.drop(columns='HeartDisease')#dataset except target
-    #X_numerics=dataset['HeartDisease']
-    n_clusters = [2,3,4,5,6,7,8] # number of clusters
+    X=dataset.drop(columns='HeartDisease')
+    #dataset except target
+    n_clusters = [2,3,4,5,6,7,8] 
+    # number of clusters
     meandistortions = []
-
     for n in n_clusters:
         kmeans= KMeans(n_clusters=n, init='k-means++')
         kmeans.fit(X)
-        #meandistortions.append(kmeans.inertia_)
-        #md=meandistortions.append(np.min(kmeans.inertia_) / X.shape[0])
         meandistortions.append(sum(np.min(cdist(X,kmeans.cluster_centers_,'euclidean'),axis=1))/X.shape[0])
-        #cdist:Computes distance between each pair of the two collections of inputs.
-        #计算所有点与对应中心的距离的平方和的均值
+        #calculate the minimum distance between each cluster centers
     fig, ax = plt.subplots(figsize=(12,5))
     ax = sns.lineplot(n_clusters, meandistortions, marker='o', ax=ax)
     ax.set_title("Elbow method")
@@ -174,29 +171,37 @@ def para_coor(dataset):
     plt.title('Parallel Coordination (Sex)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Sex.png')
     plt.show()
+    #show parallel coordinates between sex and remaining parameters.
     parallel_coordinates(X,'Age')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Age)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Age.png')
     plt.show()
+    #show parallel coordinates between age and remaining parameters.
     parallel_coordinates(X,'RestingBP')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (RestingBP)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_RestingBP.png')
     plt.show()
+    #show parallel coordinates between RestingBP and remaining parameters.
     parallel_coordinates(X,'Cholesterol')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Cholesterol)', fontsize=12)
     plt.savefig('Figure/Parellel_Coordination_Cholesterol.png')
     plt.show()
+    #show parallel coordinates between Cholesterol and remaining parameters.
     parallel_coordinates(X,'MaxHR')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (MaxHR)', fontsize=12)
-    plt.savefig('Figure/Parellel_Coordination_MaxHR.png')    plt.show()
+    plt.savefig('Figure/Parellel_Coordination_MaxHR.png')    
+    plt.show()
+    #show parallel coordinates between MaxHR and remaining parameters.
     parallel_coordinates(X,'Oldpeak')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5,-0.1),ncol=30,fancybox=True,shadow=True)
     plt.title('Parallel Coordination (Oldpeak)', fontsize=12)
-    plt.savefig('Figure/Parellel_Coordination_Oldpeak.png')    plt.show()
+    plt.savefig('Figure/Parellel_Coordination_Oldpeak.png')    
+    plt.show()
+    #show parallel coordinates between Oldpeak and remaining parameters.
     #plots of remaining parameters are not shown in the coding above since their plots are the same as others
 
 
@@ -242,6 +247,7 @@ def plot_confusion_matrix(y_test, y_pred,modelname):
         None
     '''
     conf_matrix = confusion_matrix(y_true=y_test, y_pred=y_pred)
+    
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.matshow(conf_matrix, cmap='GnBu', alpha=0.75)
     for i in range(conf_matrix.shape[0]):
@@ -387,15 +393,22 @@ def logisticRegression(dataset):
         None
     '''
     X = dataset.drop(['HeartDisease'], axis=1)
+    #Dataset except target
     Y = dataset['HeartDisease']
+    #Dataset of target
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
+    #Dplit data to training set and test set
     transfer = StandardScaler()
     x_train = transfer.fit_transform(x_train)
     x_test = transfer.fit_transform(x_test)
+    #Feature scaling
     lr=LogisticRegression(class_weight="balanced")
     lr.fit(x_train,y_train)
+    #Fit the model to training set
     y_pred=lr.predict(x_test)
+    #Predict the result of test set
     y_pred_proba=lr.predict_proba(x_test)
+    #Predict the result of test set to plot ROC and calculate AUC
     joblib.dump(lr, "Model/lr_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Logistic Regression')
     ROC_curve(y_test, y_pred_proba,'Logistic Regression')
@@ -417,15 +430,22 @@ def RandomForest(dataset):
         None
     '''
     X = dataset.drop(['HeartDisease'], axis=1)
+    #Dataset except target
     Y = dataset['HeartDisease']
+    #Dataset of target
     x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
+    #Split data to training set and test set
     transfer = StandardScaler()
     x_train = transfer.fit_transform(x_train)
     x_test = transfer.fit_transform(x_test)
+    #Feature scaling
     rf = RandomForestClassifier(n_estimators=10, n_jobs=2)
     rf.fit(x_train,y_train)
+    #Fit the model to training set
     y_pred=rf.predict(x_test)
+    #Predict the result of test set
     y_pred_proba=rf.predict_proba(x_test)
+    #Predict the result of test set to plot ROC and calculate AUC
     joblib.dump(rf, "Model/rf_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'RandomForest')
     ROC_curve(y_test, y_pred_proba,'RandomForest')
@@ -446,19 +466,24 @@ def decision_tree(dataset):
     **Return**
         None
     '''
-    x=dataset.drop(columns='HeartDisease')#dataset except target
+    x=dataset.drop(columns='HeartDisease')
+    #Dataset except target
     y=dataset['HeartDisease']
-    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
-    #model=DecisionTreeClassifier(random_state=0)
-    #model=DecisionTreeClassifier(random_state=0)
+    #Dataset of target
+    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)
+    #Split data to training set and test set
     model= DecisionTreeClassifier(criterion='gini',
                                        max_depth=6,
                                        max_leaf_nodes=14,
                                        min_samples_leaf=1)
-    model.fit(x_train, y_train)#training
+    model.fit(x_train, y_train)
+    #Fit the model with optimal parameters to training set
     y_pred=model.predict(x_test)
+    #Predict the result of test set
     y_pred_proba=model.predict_proba(x_test)
+    #Predict the result of test set to plot ROC and calculate AUC
     tree.plot_tree(model)
+    #Virtualise decision tree
     joblib.dump(model, "Model/dt_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Decision Tree')
     ROC_curve(y_test, y_pred_proba,'Decision Tree')
@@ -479,13 +504,19 @@ def gaussian_nb(dataset):
     **Return**
         None
     '''
-    x=dataset.drop(columns='HeartDisease')#dataset except target
+    x=dataset.drop(columns='HeartDisease')
+    #Dataset except target
     y=dataset['HeartDisease']
-    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)#data split
+    #Dataset of target
+    x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.2,random_state=0)
+    #Split data to training set and test set
     GNB=GaussianNB()
-    GNB.fit(x_train, y_train)#training
+    GNB.fit(x_train, y_train)
+    #Fit the model to training set
     y_pred=GNB.predict(x_test)
+    #Predict the result of test set
     y_pred_proba=GNB.predict_proba(x_test)
+    #Predict the result of test set to plot ROC and calculate AUC
     joblib.dump(GNB, "Model/gnb_model.joblib" ,compress=1)
     plot_confusion_matrix(y_test,y_pred,'Gaussian Naive Bayes')
     ROC_curve(y_test, y_pred_proba,'Gaussian Naive Bayes')
