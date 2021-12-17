@@ -583,32 +583,37 @@ def input_gui():
         pada['ExerciseAngina']=ExerciseAngina.get()
         pada['Oldpeak']=Oldpeak.get()
         pada['ST_Slope']=ST_Slope.get()
+        # The input obtained from GUI interface is not totally as the same as what the tester input value.
+        # We need to transfer number 1,2,3 into what they represent for.
         pada['Sex'].replace([1,2],['M', 'F'], inplace = True)
         pada['ChestPainType'].replace([1,2,3,4],['TA','ATA','ASY','NAP'], inplace = True)
         pada['RestingECG'].replace([1,2,3],['Normal','ST','LVH'], inplace = True)
         pada['ExerciseAngina'].replace([1,2], ['Y','N'],inplace = True)
         pada['ST_Slope'].replace([1,2,3], ['Up','Flat','Down'],inplace = True)
+        # The data of new patient will be stored.
         pada.to_csv('new_patient_data.csv')
         frame1.quit()
 
+
+    # Construct a GUI interface 
     toop = Tk()
     toop.title("Heart Failure Prediction")
     Label(toop,text="Please input patient information").pack()
+    # Construct a GUI panel to form a question list with multiple choose and short an
     frame1 = Frame(toop)
-
-    age = StringVar()
+    # Ask the age of patient
+    age = StringVar() # address the variable 'age' to obatin its input value
     Label(frame1,text="Age").grid(row=0,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=age).grid(row=1,column=0)
-  
-
+    # Ask the sex of patient
     Label(frame1,text="Sex:").grid(row=2,column=0,sticky=W)
     list1 = [("M", 1),("F", 2)]
-    sex = IntVar()
+    sex = IntVar() # address the variable 'sex' to obatin its input value
     i = 3
     for num1, check1 in list1:
         Radiobutton(frame1, text=num1, variable=sex,value=check1).grid(row=i, column=0, sticky=W)
         i += 1
-
+    # Ask the ChestPainType of patient    
     Label(frame1,text="ChestPainType:").grid(row=i+1,column=0,sticky=W)
     list2 = [("TA", 1),("ATA", 2),("ASY", 3),("NAP", 4)]
     ChestPainType = IntVar()
@@ -616,19 +621,19 @@ def input_gui():
     for num2, check2 in list2:
         Radiobutton(frame1, text=num2, variable=ChestPainType,value=check2).grid(row=k, column=0, sticky=W)
         k += 1
-
+    # Ask the RestingBP of patient  
     RestingBP = StringVar()
     Label(frame1,text="RestingBP:").grid(row=k+1,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=RestingBP).grid(row=k+2,column=0)
-
+    # Ask the Cholesterol of patient  
     Cholesterol = StringVar()
     Label(frame1,text="Cholesterol:").grid(row=k+3,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=Cholesterol ).grid(row=k+4,column=0)
-
+    # Ask the FastingBS of patient  
     FastingBS = StringVar()
     Label(frame1,text="FastingBS:").grid(row=k+5,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=FastingBS).grid(row=k+6,column=0)
-
+    # Ask the RestingECG of patient  
     Label(frame1,text="RestingECG:").grid(row=k+7,column=0,sticky=W)
     list3 = [("Normal", 1),("ST", 2),("LVH", 3),]
     RestingECG = IntVar()
@@ -636,11 +641,11 @@ def input_gui():
     for num3, check3 in list3:
         Radiobutton(frame1, text=num3, variable=RestingECG,value=check3).grid(row=a, column=0, sticky=W)
         a += 1
-
+    # Ask the MaxHR of patient  
     MaxHR = StringVar()
     Label(frame1,text="MaxHR").grid(row=a+1,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=MaxHR).grid(row=a+2,column=0)
-
+    # Ask the ExerciseAngina of patient  
     Label(frame1,text="ExerciseAngina").grid(row=a+3,column=0,sticky=W)
     list4 = [("Yes", 1),("No", 2)]
     ExerciseAngina = IntVar()
@@ -648,11 +653,11 @@ def input_gui():
     for num4, check4 in list4:
         Radiobutton(frame1, text=num4, variable=ExerciseAngina,value=check4).grid(row=b, column=0, sticky=W)
         b += 1
-
+    # Ask the Oldpeak of patient  
     Oldpeak = StringVar()
     Label(frame1,text="Oldpeak").grid(row=b+1,column=0,sticky=W)
     Entry(frame1,text="Input",textvariable=Oldpeak).grid(row=b+2,column=0)
-
+    # Ask the ST_Slope of patient  
     Label(frame1,text="ST_Slope").grid(row=b+3,column=0,sticky=W)
     list4 = [("Up", 1),("Flat", 2),('Down',3)]
     ST_Slope = IntVar()
@@ -660,8 +665,8 @@ def input_gui():
     for num4, check4 in list4:
         Radiobutton(frame1, text=num4, variable=ST_Slope,value=check4).grid(row=c, column=0, sticky=W)
         c += 1
-
     frame1.pack(padx=20,pady=20)
+    # establish a bottom to submit the input value
     Button(toop,text="Submit",bg="white",fg="blue",command=clicked).pack(side=BOTTOM)
     mainloop()
     return pada
@@ -754,6 +759,7 @@ def show_gui(new_model,model_choice):
     im=PILImage.open(name)
     img=ImageTk.PhotoImage(im)
     Label(frame3,image=img).pack()
+    # construct a bottom to quit the GUI interface
     Button(frame3,text="Quit",command=quit).pack(side=BOTTOM)
     mainloop()
     
@@ -853,29 +859,30 @@ class test(unittest.TestCase):
 
 if __name__ == '__main__':
 
-    # ## Read & Address the data and do feature exploration ##
-    # #######################################################
-    # df = pd.read_csv('heart.csv')
-    # data = read_data(df)
-    # corr(data)
-    # kmeans_find_cluster(data)
-    # para_coor(data)
-    # t_SNE(data)
-    # cleaned_data = data_clean(data)
+    ## Read & Address the data and do feature exploration ##
+    #######################################################
+    df = pd.read_csv('heart.csv')
+    data = read_data(df)
+    corr(data)
+    kmeans_find_cluster(data)
+    para_coor(data)
+    t_SNE(data)
+    cleaned_data = data_clean(data)
 
-    # ## Use machine learning model to make classification ##
-    # #######################################################
-    # logisticRegression(cleaned_data)
-    # RandomForest(cleaned_data)
-    # decision_tree(cleaned_data)
-    # gaussian_nb(cleaned_data)
-
-    ## The GUI interface permit for inputing information of a new pateint to obatin a prediction ##
-    ## The following function should be runned individually
+    ## Use machine learning model to make classification ##
     ########################################################
-    input_gui()
-    choosemodel_gui()
+    logisticRegression(cleaned_data)
+    RandomForest(cleaned_data)
+    decision_tree(cleaned_data)
+    gaussian_nb(cleaned_data)
 
-    # The unittest part for separate function ##
-    ########################################################
-    unittest.main()
+    # # ## The GUI interface permit for inputing information of a new pateint to obatin a prediction ##
+    # # ## The following function should be runned individually ##
+    # ############################################################
+    # input_gui()
+    # choosemodel_gui()
+
+    # ## The unittest part for separate function ##
+    # ## The following function should be runned individually ##
+    # ##########################################################
+    # unittest.main()
