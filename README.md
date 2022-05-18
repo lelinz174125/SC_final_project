@@ -1,5 +1,5 @@
 ## Background
-The project plan to use an [open database](https://www.kaggle.com/fedesoriano/heart-failure-prediction) which contains 918 observations with 12 attributes to establish heart failure prediction models. 
+The project plan to use an [open database](https://www.kaggle.com/datasets/fedesoriano/hepatitis-c-dataset?resource=download) which contains 918 observations with 12 attributes to establish heart failure prediction models. 
 Machine learning algorithms such as logistic regression, random forests are possible choices for model fitting. Also, our program will allow heart failure prediction for new variants of a patient.
 
 ## Setup instructions
